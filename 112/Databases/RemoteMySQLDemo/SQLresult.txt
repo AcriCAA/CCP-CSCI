@@ -1,0 +1,13 @@
+SELECT * FROM pet;
+Owner       Pet's Name  
+*******************************************************
+Harold      Fluffy      
+Harold      Buffy       
+Benny       Fang        
+Diane       Bowser      
+Gwen        Chirpy      
+Benny       Slim        
+Gwen        Whistler    
+Diane       Puffball    
+Daphne      Spikey Toes 
+*******************************************************

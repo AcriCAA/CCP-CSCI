@@ -1,0 +1,25 @@
+Corey Acri
+CSCI 112
+Student Queries
+8/7/2016
+
+
+a. Student ID, Student Name, Phone Number for students that live in Newark DE
+
+	SELECT snum, firstname, lastname, phone  FROM STUDENT WHERE city = 'Newark' AND st = 'DE';
+
+b. Student ID, Student Name, Phone Number for students with grade point averages greater than 3.0
+
+	SELECT snum, firstname, lastname, phone  FROM STUDENT WHERE gpa > 3.0;
+
+c. Student ID, Student Name, Phone Number for students that live in NY and PA
+
+	SELECT snum, firstname, lastname, phone  FROM STUDENT WHERE st = 'NY' AND st = 'PA';
+
+d. Student Name, Address, City, State and Zip Code for students that are Female and major is CIS
+
+	SELECT firstname, lastname, street, city, st, zip FROM STUDENT WHERE gender = 'F' AND major = 'CIS';
+
+e. Student ID, Student Name, Phone Number for students in zip code 19130 that are on Scholarship
+
+	 SELECT snum, firstname, lastname, phone FROM STUDENT WHERE zip = '19130' AND scholarship = 1;

@@ -1,0 +1,31 @@
+Corey Acri
+CSCI 112
+Tiny College Assignment 
+8/12/2016
+
+
+List the meeting times of all Accounting Classes
+
+
+SELECT CLASS_TIME FROM CLASS WHERE CRS_CODE = "ACCT-211" OR CRS_CODE =  "ACCT-212";
+
+
+List the Course Description and Credits for all CIS Courses
+
+SELECT CRS_DESCRIPTION, CRS_CREDIT FROM COURSE WHERE DEPT_CODE = "CIS";
+
+
+
+List the Department Code, Department Name and Phone Number of all departments
+
+SELECT DEPT_CODE, DEPT_NAME, DEPT_EXTENSION FROM DEPARTMENT;
+
+
+List the full name and Date of Birth of All Employees Hired Before 1980
+
+SELECT EMP_FNAME, EMP_LNAME, EMP_DOB FROM EMPLOYEE WHERE EMP_HIREDATE < "19800101";
+
+
+List the Full Name and Phone Number of all students with Grade Point Averages less than 3.0
+
+SELECT STU_FNAME, STU_LNAME,STU_PHONE FROM STUDENT WHERE STU_GPA < 3.0;
