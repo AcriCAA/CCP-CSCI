@@ -5,7 +5,7 @@
  */
 package listofstates;
 
-import java.io.*;
+
 import java.util.*;
 
 /**
@@ -80,24 +80,34 @@ public static void loadArray(State[] state) throws Exception
         }
     } // end displayStates()   
 //============================================================================= 
-    
-    
-    
+   
+//=============================================================================
+//This method runs the state search until the user quits by typing ":wq"  
+//============================================================================= 
 public static void findState (State[] states, int count) {
 
 // set up instance of Scanner for input
         Scanner kb = new Scanner(System.in);
-
-        // startup message to use
-        System.out.println("This program can display a state's capital and population.");
-        // input n -- prompt & capture 
-        System.out.println("Please enter a state name to display the information"
-                + "for a state or \"all states\" to display a list of all states:");
-       
-        String input = kb.nextLine();
+        
         String currentState = "";
         boolean foundMatchForInput = false;
+        String input = ""; // input string 
+
+        // startup message to use
+        System.out.println("=============================================================");
+        System.out.println("This program can display a state's capital and population.");
+        System.out.println("=============================================================");
        
+        
+        do {
+         // input n -- prompt & capture 
+        System.out.print("You can enter a state name to display data for that state.\n\n" 
+                
+                + "Enter a state name or \"all states\" to display a list of all states:" + 
+                "\n(type \":wq\" at anytime to quit program)\n=> ");
+           
+        input = kb.nextLine();
+        
          if (input.compareTo("all states") == 0) {
              foundMatchForInput = true; 
              displayStates(states, count);
@@ -112,32 +122,35 @@ public static void findState (State[] states, int count) {
 
 
                     if(currentState.compareToIgnoreCase(input) == 0) {
-                          System.out.println("==> Found Match");
+                          System.out.println("***** Found Match ****");
                            foundMatchForInput = true; 
                           System.out.println(states[i].toString());
                           
 
                        }
-                    else {
-                        
-                        foundMatchForInput = false; 
-                        
-
-                    }
+                  
                         
                 } // close for loop
                 
                 if (foundMatchForInput == false){
 
-                        System.out.println("Sorry, could not find a matching state"); 
+                        System.out.print("\nSorry, could not find a matching state\n"
+                                + "============================================================="
+                        +"\nTry entering a state name again or \"type \\\":wq\\\" at anytime to quit program\n"
+                                + "=> "); 
 
                 }                
          
          }// end parent else statement 
             
-            
+        // reset state found sentinal to false    
+        foundMatchForInput = false; 
+        
+        } while (input.compareTo(":wq") != 0);
         
         }
+        
+       
    
 
 } // end ListofStates class
