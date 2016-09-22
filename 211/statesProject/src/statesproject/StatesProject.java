@@ -1,10 +1,11 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Corey Acri
+ * CSCI 211
+ * This project loads a list of States from a data file into a State list object
+ * and then allows the user to search for information on the capital and population 
+ * for a given state name
  */
-package listofstates;
-
+package statesproject;
 
 import java.util.*;
 
@@ -12,28 +13,70 @@ import java.util.*;
  *
  * @author AcriCAA
  */
-public class ListOfStates {
+public class StatesProject {
 
     /**
      * @param args the command line arguments
+     * @throws java.lang.Exception
      */
     public static void main(String[] args) throws Exception {
+          
+        int numberOfStates = 100; // matches limit in ListOfStates
+
+        State oneState = new State(); 
+        ListOfStates statesList = new ListOfStates(); 
+        numberOfStates = countFile();
+
+
+        loadArray(statesList, numberOfStates);
+        findState(statesList, numberOfStates);
         
-        int numberOfStates = 50; 
-        State[] states = new State[numberOfStates]; // array of 50 states  
-        loadArray(states);
-        findState(states, numberOfStates);
+        System.out.println("Trying to print the full list after load:"); 
+        displayStates(statesList, numberOfStates);
         
         
     } // end main 
+    
+//=============================================================================
+// This method loads the array of states from a file    
+//=============================================================================
+public static int countFile() throws Exception
+    {
+        
+        int stateCount = 0; 
+        
+        // Create a File class object linked to the name of the file to be read
+        java.io.File counterFile = new java.io.File("statedata.txt");
+
+        // Create a Scanner named infile to read the input stream from the file
+        Scanner infile = new Scanner(counterFile);
+
+        // count the number of states in the file. 
+        do {
+        
+        stateCount++;
+        infile.nextLine();
+        
+        } while(infile.hasNextLine() == true);
+       
+        stateCount = stateCount/3; 
+       
+        infile.close();
+        
+        return stateCount; 
+
+    } // endLoadArray
+//=============================================================================
     
 
 //=============================================================================
 // This method loads the array of states from a file    
 //=============================================================================
-public static void loadArray(State[] state) throws Exception
+public static void loadArray(ListOfStates sList, int numberOfStates) throws Exception
     {
-        int i; // a loop counter
+        int i = 0; // a loop counter
+       
+       
         
         // declare temporary variables to hold properties read from a file
         String inStateName;    
@@ -41,28 +84,39 @@ public static void loadArray(State[] state) throws Exception
         String inPopulation;
         
         // Create a File class object linked to the name of the file to be read
-        java.io.File squareFile = new java.io.File("statedata.txt");
+        java.io.File stateFile = new java.io.File("statedata.txt");
 
         // Create a Scanner named infile to read the input stream from the file
-        Scanner infile = new Scanner(squareFile);
+        Scanner infile = new Scanner(stateFile);
 
-        
-        /* This loop reads data into the square array.
-         * Each item of data is a separate line in the file.
-         * There are 50 sets of data for the 50 states.
-         */
-        for( i=0; i<50; i++)
+        // count the number of states in the file. 
+    
+       
+        for(i = 0; i < numberOfStates; i++)
         {
+             State tempState = new State();
+             
             // read data from the file into temporary variables
             // read Strings directly; parse integers
             inStateName  = infile.nextLine(); 
             inCapital  = infile.nextLine(); 
             inPopulation = infile.nextLine(); 
-         
-            // intialze each square with the BoardSquare constructor
-            state[i] = new State(inStateName, inCapital, inPopulation);
+            
+            tempState.setCapital(inCapital);
+            tempState.setPopulation(inPopulation);
+            tempState.setStateName(inStateName);
+            
+            sList.setState(tempState, i);
+
+            
         } // end for
+        
+        
+     
         infile.close();
+        
+        
+
 
     } // endLoadArray
 //=============================================================================
@@ -70,12 +124,15 @@ public static void loadArray(State[] state) throws Exception
 //=============================================================================
 //This method prints the full array of states on the screen. 
 //=============================================================================
-    public static void displayStates(State[] states, int count) {
+    public static void displayStates(ListOfStates sList, int count) {
 
-        
+       State tempState = new State(); 
+       
+       System.out.println("printing the entire list now:"); 
        for (int i = 0; i < count; i++){
-        
-            System.out.println(states[i].toString());
+            
+            tempState = sList.getState(i);
+            System.out.println(tempState.toString());
         
         }
     } // end displayStates()   
@@ -84,14 +141,15 @@ public static void loadArray(State[] state) throws Exception
 //=============================================================================
 //This method runs the state search until the user quits by typing ":wq"  
 //============================================================================= 
-public static void findState (State[] states, int count) {
+public static void findState (ListOfStates lStates, int count) {
 
 // set up instance of Scanner for input
         Scanner kb = new Scanner(System.in);
         
-        String currentState = "";
+        String currentStateName = "";
         boolean foundMatchForInput = false;
         String input = ""; // input string 
+        State tempState = new State(); 
 
         // startup message to use
         System.out.println("=============================================================");
@@ -110,21 +168,23 @@ public static void findState (State[] states, int count) {
         
          if (input.compareTo("all states") == 0) {
              foundMatchForInput = true; 
-             displayStates(states, count);
+             displayStates(lStates, count);
          
          }
          
          else {
         
                 for (int i = 0; i < count; i++){
-                currentState = states[i].getStateName(); 
+                
+                tempState = lStates.getState(i);
+                currentStateName = tempState.getStateName();
 
 
 
-                    if(currentState.compareToIgnoreCase(input) == 0) {
+                    if(currentStateName.compareToIgnoreCase(input) == 0) {
                           System.out.println("***** Found Match ****");
-                           foundMatchForInput = true; 
-                          System.out.println(states[i].toString());
+                          foundMatchForInput = true; 
+                          System.out.println(tempState.toString());
                           
 
                        }
