@@ -101,8 +101,13 @@ public class ComparingSortingAlgorithms211 {
   // INSERTION 3, 
   // QUICK = 4, 
   // MERGE = 5
-                   
-       
+ 
+
+// declare name of sort as String for use in writing file later                  
+ String sortType = "Bubble Sort";    
+ 
+ //declare array to hold time values the size of x (number of passes)
+ double [] timeArray = new double[x];
                            
                    
                    
@@ -121,10 +126,17 @@ public class ComparingSortingAlgorithms211 {
      }    
      
      else { // Test the BubbleSort
+         
+         // declare name of sort as String for use in writing file later
+         sortType = "BubbleSort";
+                 
          printLineBreak(71,'`');
          System.out.println("TESTING BUBBLE SORT"); 
          System.out.println("Array size: " + size);
          printLineBreak(71,'`');
+         
+         
+         
      for (int k = 1; k<= x; k++){
        
         //make a copy of the original array every pass;  
@@ -138,24 +150,18 @@ public class ComparingSortingAlgorithms211 {
 //        System.out.println("Array Copy:");
 //        printArray(arrayCopy);
             
-        // create a File class object and give the file the name SQLresult.txt
-        java.io.File testResult = new java.io.File("bubbleSort" + "Size" + size + "pass" + k +".csv");
-  
-        // Create a PrintWriter text output stream and link it to the File sqlResult
-        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
         
-        outfile.println("Bubble Sort");
-        outfile.println("Size: " + size);
                
 
         System.out.println("ATTEMPT #" + k);
            long startTime = System.nanoTime();
            // run sort method
            bubbleSort(arrayCopy);
-           double time = calculateDuration(startTime);
-            outfile.print(time);
-            outfile.print(",");
-  
+           
+           // using k-1 as index because k starts at 1 for print purposes
+           timeArray[k-1] = calculateDuration(startTime);
+           
+           
             
                  //for testing
 //           printLineBreak(71,':');
@@ -170,8 +176,10 @@ public class ComparingSortingAlgorithms211 {
 //             printLineBreak(71,':');
             
             
-            outfile.close();
-        } 
+            
+        } // close forLoop 
+     
+        printCSV(size, x, timeArray, sortType);
      }
    		break;
                 
@@ -186,11 +194,19 @@ public class ComparingSortingAlgorithms211 {
      }    
      
      else { // Test the SelectionSort
+         
+        
+         sortType = "SelectionSort";
+         
+         
+         
          printLineBreak(71,'`');
          System.out.println("TESTING SELECTION SORT"); 
          System.out.println("Array size: " + size);
          printLineBreak(71,'`');
-     for (int k = 1; k<= x; k++){
+        
+         
+       for (int k = 1; k<= x; k++){
        
         //make a copy of the original array every pass;  
         int [] arrayCopy = new int[size];
@@ -203,23 +219,17 @@ public class ComparingSortingAlgorithms211 {
 //        System.out.println("Array Copy:");
 //        printArray(arrayCopy);
 //            
-        // create a File class object and give the file the name SQLresult.txt
-        java.io.File testResult = new java.io.File("selectionSort" + "Size" + size + "pass" + k +".csv");
-  
-        // Create a PrintWriter text output stream and link it to the File sqlResult
-        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
-        
-        outfile.println("Selection Sort");
-        outfile.println("Size: " + size);
+       
                
 
         System.out.println("ATTEMPT #" + k);
            long startTime = System.nanoTime();
            // run sort method
            selectionSort(arrayCopy);
-           double time = calculateDuration(startTime);
-            outfile.print(time);
-            outfile.print(",");
+           
+           
+           // using k-1 as index because k starts at 1 for print purposes
+           timeArray[k-1] = calculateDuration(startTime);
     
                  //for testing
 //           printLineBreak(71,':');
@@ -234,8 +244,9 @@ public class ComparingSortingAlgorithms211 {
 //             printArray(arrayCopy);
 //             printLineBreak(71,':');
 //            
-            outfile.close();
+            
         } 
+        printCSV(size, x, timeArray, sortType);
      }
    		break;
         
@@ -252,6 +263,11 @@ public class ComparingSortingAlgorithms211 {
      }    
      
      else { // Test the Insertion Sort
+              
+              
+     // declare name of sort as String for use in writing file later
+         sortType = "InsertionSort";
+         
      printLineBreak(71,'`');
          System.out.println("TESTING INSERTION SORT"); 
          System.out.println("Array size: " + size);
@@ -269,23 +285,18 @@ public class ComparingSortingAlgorithms211 {
 //        System.out.println("Array Copy:");
 //        printArray(arrayCopy);
 //            
-        // create a File class object and give the file the name SQLresult.txt
-        java.io.File testResult = new java.io.File("insertionSort" + "Size" + size + "pass" + k +".csv");
-  
-        // Create a PrintWriter text output stream and link it to the File sqlResult
-        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
-        
-        outfile.println("Insertion Sort");
-        outfile.println("Size: " + size);
+       
                
 
         System.out.println("ATTEMPT #" + k);
            long startTime = System.nanoTime();
            // run sort method
            insertionSort(arrayCopy);
-           double time = calculateDuration(startTime);
-            outfile.print(time);
-            outfile.print(",");
+           
+           // using k-1 as index because k starts at 1 for print purposes
+           timeArray[k-1] = calculateDuration(startTime); 
+           
+           
 
                  //for testing
 //           printLineBreak(71,':');
@@ -300,13 +311,19 @@ public class ComparingSortingAlgorithms211 {
 //             printLineBreak(71,':');
 //            
             
-            outfile.close();
+            
         } // close for loop
+     
+        printCSV(size, x, timeArray, sortType);
+        
      } // close else 
    		break;
     
     case 4:	// Quick Sort
    
+        // declare name of sort as String for use in writing file later
+         sortType = "QuickSort";
+        
          printLineBreak(71,'`');
          System.out.println("TESTING QUICK SORT"); 
          System.out.println("Array size: " + size);
@@ -325,24 +342,16 @@ public class ComparingSortingAlgorithms211 {
 //        System.out.println("Array Copy:");
 //        printArray(arrayCopy);
 //            
-        // create a File class object 
-        java.io.File testResult = new java.io.File("quickSort" + "Size" + size + "pass" + k +".csv");
-  
-        // Create a PrintWriter text output stream and link it to the file
-        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
-        
-        outfile.println("Running Quick Sort");
-        outfile.println("Size: " + size);
-               
+       
 
         System.out.println("ATTEMPT #" + k);
            long startTime = System.nanoTime();
            // run sort method
            quickSort(arrayCopy, 0, (arrayCopy.length - 1)); 
-           double time = calculateDuration(startTime);
-            outfile.print(time);
-            outfile.print(",");
-
+           
+           
+           // using k-1 as index because k starts at 1 for print purposes
+           timeArray[k-1] = calculateDuration(startTime);
                  //for testing
 //           printLineBreak(71,':');
 //           System.out.println("Unsorted (array):");
@@ -357,14 +366,17 @@ public class ComparingSortingAlgorithms211 {
 //             printLineBreak(71,':');
 //            
             
-            outfile.close();
+            
         } // close for loop
-     
+        printCSV(size, x, timeArray, sortType);
    		break;
            
            
          
     case 5:	// Merge Sort
+        
+        
+        sortType = "MergeSort";
         
         printLineBreak(71,'`');
          System.out.println("TESTING MERGE SORT"); 
@@ -388,23 +400,16 @@ public class ComparingSortingAlgorithms211 {
 //        System.out.println("Array Copy:");
 //        printArray(arrayCopy);
 //            
-        // create a File class object 
-        java.io.File testResult = new java.io.File("mergeSort" + "Size" + size + "pass" + k +".csv");
-  
-        // Create a PrintWriter text output stream and link it to the file
-        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
-        
-        outfile.println("Running Merge Sort");
-        outfile.println("Size: " + size);
-               
+       
 
         System.out.println("ATTEMPT #" + k);
            long startTime = System.nanoTime();
            // run sort method
            mergeSort(arrayCopy, temp, 0, (arrayCopy.length - 1));
-           double time = calculateDuration(startTime);
-            outfile.print(time);
-            outfile.print(",");
+           
+           // using k-1 as index because k starts at 1 for print purposes
+           timeArray[k-1] = calculateDuration(startTime);
+           
            
            //for testing
 //           printLineBreak(71,':');
@@ -419,9 +424,9 @@ public class ComparingSortingAlgorithms211 {
 //             printArray(arrayCopy);
 //             printLineBreak(71,':');
 //             
-            outfile.close();
+            
         } // close for loop
-     
+     printCSV(size, x, timeArray, sortType);
    		break;
                 
     default :	System.out.println("ERROR: INVALID CHOICE");
@@ -761,9 +766,32 @@ public static void copyArray(int [] a, int [] b){
 }
 
 
-public static void printCSV(int size, int pass, double [] time){
+public static void printCSV(int size, int pass, double [] time, String sortType) throws FileNotFoundException{
 
-
+ // create a File class object 
+        java.io.File testResult = new java.io.File(sortType + "Size" + size + ".csv");
+  
+        // Create a PrintWriter text output stream and link it to the file
+        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);  
+        
+        outfile.println(sortType);
+        outfile.println("Size: " + size);
+               
+       // print the column headers
+       for(int i = 1; i <= time.length; i++)
+            outfile.print("Pass " + i + ",");
+       
+       // start a new row
+       outfile.println();
+       
+       // print row of results
+       for(int j = 0; j < time.length; j++){
+                outfile.print(time[j]);
+            outfile.print(",");
+       }
+       
+            //close file
+            outfile.close();
 
 
 
