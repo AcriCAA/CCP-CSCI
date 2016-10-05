@@ -31,7 +31,7 @@ public class ComparingSortingAlgorithms211 {
         for (int size = 100; size <= 10000000; size *= 10) {
 
             //smaller loop for testing 
-            //for(int size = 5; size <= 10; size++){
+//            for(int size = 5; size <= 10; size++){
             // There are five sort methods, so here we create a new array and five copies
             // fill the first array 
             int[] bubbleArray = new int[size];
@@ -100,6 +100,11 @@ public class ComparingSortingAlgorithms211 {
 
         //declare array to hold time values the size of x (number of passes)
         double[] timeArray = new double[x];
+        
+        // Variables for calculation values
+        double average = 0.0; 
+        double max = 0.0; 
+        double min = 0.0; 
 
         // switch statement to determine which sort method to test
         switch (sortingAlgorithmChoice) {
@@ -147,6 +152,10 @@ public class ComparingSortingAlgorithms211 {
                         // calculate how long it took timer to run using k-1 
                         // as index because k starts at 1 for printing purposes
                         timeArray[k - 1] = calculateDuration(startTime);
+//public static void printCSV(int size, int pass, double[] time, String sortType, double min, double max, double avg) throws FileNotFoundException {
+                        average = calculateAverage(timeArray);
+                        min = calculateMin(timeArray);
+                        max = calculateMax(timeArray);
 
 //for testing
 //           printLineBreak(71,':');
@@ -160,7 +169,7 @@ public class ComparingSortingAlgorithms211 {
                     } // close forLoop 
 
                     // call method to print to csv file
-                    printCSV(size, x, timeArray, sortType);
+                    printCSV(size, x, timeArray, sortType, min, max, average);
                 }
                 break;
 
@@ -207,6 +216,10 @@ public class ComparingSortingAlgorithms211 {
 
                         // calculate duration using k-1 as index because k starts at 1 for print purposes
                         timeArray[k - 1] = calculateDuration(startTime);
+                        
+                        average = calculateAverage(timeArray);
+                        min = calculateMin(timeArray);
+                        max = calculateMax(timeArray);
 
                         //for testing
 //           printLineBreak(71,':');
@@ -220,7 +233,7 @@ public class ComparingSortingAlgorithms211 {
 //             printLineBreak(71,':');
 //            
                     }
-                    printCSV(size, x, timeArray, sortType);
+                    printCSV(size, x, timeArray, sortType, min, max, average);
                 }
                 break;
 
@@ -267,6 +280,9 @@ public class ComparingSortingAlgorithms211 {
 
                         // using k-1 as index because k starts at 1 for print purposes
                         timeArray[k - 1] = calculateDuration(startTime);
+                        average = calculateAverage(timeArray);
+                        min = calculateMin(timeArray);
+                        max = calculateMax(timeArray);
 
                         //for testing
 //           printLineBreak(71,':');
@@ -283,7 +299,7 @@ public class ComparingSortingAlgorithms211 {
                     } // close for loop
                     
                     // print results to csv file
-                    printCSV(size, x, timeArray, sortType);
+                    printCSV(size, x, timeArray, sortType, min, max, average);
 
                 } // close else 
                 break;
@@ -326,6 +342,10 @@ public class ComparingSortingAlgorithms211 {
                     // calculate duration using k-1 as index because k starts at 1 for print purposes
                     timeArray[k - 1] = calculateDuration(startTime);
                     
+                    average = calculateAverage(timeArray);
+                        min = calculateMin(timeArray);
+                        max = calculateMax(timeArray);
+                    
                     
                     //for testing
 //           printLineBreak(71,':');
@@ -343,7 +363,7 @@ public class ComparingSortingAlgorithms211 {
                 } // close for loop
                 
                 // print time results to csv 
-                printCSV(size, x, timeArray, sortType);
+                printCSV(size, x, timeArray, sortType, min, max, average);
                 break;
 
             case 5:	// Merge Sort
@@ -384,6 +404,10 @@ public class ComparingSortingAlgorithms211 {
 
                     // calculate duration using k-1 as index because k starts at 1 for print purposes
                     timeArray[k - 1] = calculateDuration(startTime);
+                    
+                    average = calculateAverage(timeArray);
+                        min = calculateMin(timeArray);
+                        max = calculateMax(timeArray);
 
                     //for testing
 //           printLineBreak(71,':');
@@ -398,7 +422,7 @@ public class ComparingSortingAlgorithms211 {
 //             
                 } // close for loop
                 // print time results to csv
-                printCSV(size, x, timeArray, sortType);
+                printCSV(size, x, timeArray, sortType, min, max, average);
                 break;
 
             default: // default case
@@ -667,17 +691,18 @@ public class ComparingSortingAlgorithms211 {
     public static double calculateDuration(long startTime) {
 
         double time;
+        int billion = 1000000000; // 1 billion
         long endTime = System.nanoTime();
 
         long duration = endTime - startTime;
         printLineBreak(71, '#');
         System.out.print("Time: ");
         // return the elapsed time in seconds   (nanoseconds/ 1 billion)
-        System.out.printf("%12.8f %n", (double) duration / 100000000);
+        System.out.printf("%12.8f %n", (double) duration / billion);
 
         printLineBreak(71, '#');
         // return the elapsed time in seconds   (nanoseconds/ 1 billion)
-        return time = (double) duration / 1000000000;
+        return time = (double) duration / billion;
 
     }
 ////////////////////////////////////////////////////////////////////////////////
@@ -721,11 +746,74 @@ public class ComparingSortingAlgorithms211 {
         }
 
     }
+   
+ 
+    
+////////////////////////////////////////////////////////////////////////////////     
+// this method calculates the average of array values
+//////////////////////////////////////////////////////////////////////////////// 
+public static double calculateAverage(double[]array){
+
+                // value to hold average
+                double average; 
+
+                //calculate sum of all array elements
+                double sum = 0;
+               
+                for(int i=0; i < array.length ; i++)
+                        sum = sum + array[i];
+               
+                //calculate average value
+                average = sum / array.length;
+
+                return average; 
+} // close calculateAverage
+
+
+
+////////////////////////////////////////////////////////////////////////////////     
+// this method calculates the min of array values
+//////////////////////////////////////////////////////////////////////////////// 
+public static double calculateMin(double[]array){
+    
+    
+    // default minimum value to the first item in array
+    double minValue = array[0];
+    
+    // start at index one since you already have value for first item
+    for (int i = 1; i < array.length; i++) { 
+        if (array[i] < minValue) {
+            minValue = array[i];
+        }
+    }
+    return minValue;
+
+
+}  // close calculateMinValue  
+
+////////////////////////////////////////////////////////////////////////////////     
+// this method calculates the min of array values
+//////////////////////////////////////////////////////////////////////////////// 
+public static double calculateMax(double[]array){
+
+    // default maximum value to first item in the array 
+    double maxValue = array[0];
+    
+    // start loop at 1 since you already have the value for first item
+    for (int i = 1; i < array.length; i++) {
+        if (array[i] > maxValue) {
+            maxValue = array[i];
+        }
+    }
+    return maxValue;
+
+
+} // close calculateMax
 
 ////////////////////////////////////////////////////////////////////////////////     
 // this method creates a csv file each time a sort method is test for a given size
 //////////////////////////////////////////////////////////////////////////////// 
-    public static void printCSV(int size, int pass, double[] time, String sortType) throws FileNotFoundException {
+    public static void printCSV(int size, int pass, double[] time, String sortType, double min, double max, double avg) throws FileNotFoundException {
 
         // create a File class object 
         java.io.File testResult = new java.io.File(sortType + "Size" + size + ".csv");
@@ -743,12 +831,47 @@ public class ComparingSortingAlgorithms211 {
 
         // start a new row
         outfile.println();
+        
 
         // print row of results
         for (int j = 0; j < time.length; j++) {
             outfile.print(time[j]);
             outfile.print(",");
         }
+        
+        // start a new row
+        outfile.println();
+        // start a new row
+        outfile.println();
+        
+       
+        
+        
+        
+       
+       
+        outfile.print(sortType); // sort type header
+        outfile.print(","); // move right one column
+        outfile.print(size); // print the size header
+        
+        outfile.println(); // print another row 
+        outfile.print("average"); // average row label
+        outfile.print(","); // move right one column
+        outfile.print(avg); // move right one column
+        
+        outfile.println(); // print another row 
+        outfile.print("max"); // max row label
+        outfile.print(","); // move right one column
+        outfile.print(max); // move right one column
+        
+        outfile.println(); // print another row 
+        outfile.print("min"); // min row label
+        outfile.print(","); // move right one column
+        outfile.print(min); // move right one column
+        
+        
+        
+        
 
         //close file
         outfile.close();
