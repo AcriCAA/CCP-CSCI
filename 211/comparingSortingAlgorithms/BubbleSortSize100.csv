@@ -1,0 +1,9 @@
+BubbleSort
+Size: 100
+Pass 1,Pass 2,Pass 3,Pass 4,Pass 5,Pass 6,Pass 7,Pass 8,Pass 9,Pass 10,
+5.81488E-4,4.31014E-4,4.92574E-4,4.43439E-4,4.34632E-4,5.11377E-4,7.16469E-4,5.55933E-4,6.05094E-4,2.23109E-4,
+
+BubbleSort,100
+average,4.995129E-4
+max,7.16469E-4
+min,2.23109E-4

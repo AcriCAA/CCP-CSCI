@@ -10,7 +10,6 @@ package comparingsortingalgorithms211;
 import java.io.FileNotFoundException;
 
 
-
 public class ComparingSortingAlgorithms211 {
 
     /**
@@ -24,15 +23,27 @@ public class ComparingSortingAlgorithms211 {
         final int INSERTIONRUN = 3;
         final int QUICKRUN = 4;
         final int MERGERUN = 5;
+        
+        // STEP 1: declare array of Results object to hold all results value 
+        // setting array size to 30 because that's the max number of results we will get
+        Results [] testResults = new Results[30]; 
+        
+        // STEP 2: intiate the object to load constructors        
+        for(int i = 0; i< 30; i++)
+            testResults[i] = new Results();
+        
+        int resultsIndex = 0; // holds the index in the testResults object array 
 
-        // This is the outer loop which will run until the size of the arry is greater
+        // This is the outer loop which will run until the size of the array is greater
         // than 10000000
         //100; 1000; 10,000; 100,000; 1,000,000, 10,000,000
         for (int size = 100; size <= 10000000; size *= 10) {
-
+            
             //smaller loop for testing 
-//            for(int size = 5; size <= 10; size++){
-            // There are five sort methods, so here we create a new array and five copies
+          //  for(int size = 5; size <= 5; size++){
+            
+// There are five sort methods, so here we create a new array and five copies
+            
             // fill the first array 
             int[] bubbleArray = new int[size];
             fillArray(bubbleArray, size);
@@ -65,13 +76,30 @@ public class ComparingSortingAlgorithms211 {
             int numberOfTimes = 10;
 
             //call method to run the sort of choice on the corresponding array
-            runSortXTimes(bubbleArray, numberOfTimes, size, BUBBLERUN); // BUBBLE SORT
-            runSortXTimes(selectionArray, numberOfTimes, size, SELECTIONRUN); // SELECTION SORT
-            runSortXTimes(insertionArray, numberOfTimes, size, INSERTIONRUN); // INSERTION SORT
-            runSortXTimes(quickArray, numberOfTimes, size, QUICKRUN); // QUICK SORT
-            runSortXTimes(mergeArray, numberOfTimes, size, MERGERUN); // MERGE SORT
-
+            
+       
+            
+            runSortXTimes(testResults, resultsIndex, bubbleArray, numberOfTimes, size, BUBBLERUN); // BUBBLE SORT
+            resultsIndex++; //increment the index for testResults Results object array
+            
+            runSortXTimes(testResults, resultsIndex, selectionArray, numberOfTimes, size, SELECTIONRUN); // SELECTION SORT
+            resultsIndex++; //increment the index for testResults Results object array
+            
+            runSortXTimes(testResults, resultsIndex, insertionArray, numberOfTimes, size, INSERTIONRUN); // INSERTION SORT
+            resultsIndex++;//increment the index for testResults Results object array
+            
+            runSortXTimes(testResults, resultsIndex, quickArray, numberOfTimes, size, QUICKRUN); // QUICK SORT
+            resultsIndex++;//increment the index for testResults Results object array
+            
+            runSortXTimes(testResults, resultsIndex, mergeArray, numberOfTimes, size, MERGERUN); // MERGE SORT
+            resultsIndex++;  //increment the index for testResults Results object array
+           
+            
         } //end outer array size loop
+        
+
+        // print all data from test to one csv file
+        printAllCSV(testResults);
 
     } // end main()
 
@@ -85,7 +113,7 @@ public class ComparingSortingAlgorithms211 {
 // times to test the algorithm (x), an int for the array size and a constant
 // corresponding to whichever algorithm should be tested
 ////////////////////////////////////////////////////////////////////////////////    
-    public static void runSortXTimes(int[] array, int x, int size, int sortingAlgorithmChoice)
+    public static void runSortXTimes(Results[] testResultsHere, int index, int[] array, int x, int size, int sortingAlgorithmChoice)
             throws FileNotFoundException {
 
         // the switch statement runs the case corresponding to sortingAlgorithmChoice's value 
@@ -101,7 +129,7 @@ public class ComparingSortingAlgorithms211 {
         //declare array to hold time values the size of x (number of passes)
         double[] timeArray = new double[x];
         
-        // Variables for calculation values
+        // Variables for time calculation values
         double average = 0.0; 
         double max = 0.0; 
         double min = 0.0; 
@@ -115,6 +143,10 @@ public class ComparingSortingAlgorithms211 {
                     printLineBreak(71, 'x');
                     System.out.println("Skipping BubbleSort, size too large");
                     printLineBreak(71, 'x');
+                    
+                    // in initial runs this took more than 60 seconds so just 
+                    // adding arbitray 60 second values here
+                    testResultsHere[index].setInfoR("BubbleSort", size, 60.0, 60.0, 60.0);
 
                 } else { // Test the BubbleSort
 
@@ -152,7 +184,8 @@ public class ComparingSortingAlgorithms211 {
                         // calculate how long it took timer to run using k-1 
                         // as index because k starts at 1 for printing purposes
                         timeArray[k - 1] = calculateDuration(startTime);
-//public static void printCSV(int size, int pass, double[] time, String sortType, double min, double max, double avg) throws FileNotFoundException {
+                        
+
                         average = calculateAverage(timeArray);
                         min = calculateMin(timeArray);
                         max = calculateMax(timeArray);
@@ -170,6 +203,7 @@ public class ComparingSortingAlgorithms211 {
 
                     // call method to print to csv file
                     printCSV(size, x, timeArray, sortType, min, max, average);
+                    testResultsHere[index].setInfoR(sortType,size, min, max, average);
                 }
                 break;
 
@@ -179,6 +213,7 @@ public class ComparingSortingAlgorithms211 {
                     printLineBreak(71, 'x');
                     System.out.println("Skipping SelectionSort, size too large");
                     printLineBreak(71, 'x');
+                    testResultsHere[index].setInfoR("SelectionSort", size, 60.0, 60.0, 60.0);
 
                 } else { // Test the SelectionSort
                     
@@ -234,6 +269,7 @@ public class ComparingSortingAlgorithms211 {
 //            
                     }
                     printCSV(size, x, timeArray, sortType, min, max, average);
+                    testResultsHere[index].setInfoR(sortType, size, min, max, average);
                 }
                 break;
 
@@ -244,6 +280,7 @@ public class ComparingSortingAlgorithms211 {
                     printLineBreak(71, 'x');
                     System.out.println("Skipping Insertion Sort, size too large");
                     printLineBreak(71, 'x');
+                    testResultsHere[index].setInfoR("InsertionSort", size, 60.0, 60.0, 60.0);
 
                 } else { // Test the Insertion Sort
 
@@ -300,6 +337,7 @@ public class ComparingSortingAlgorithms211 {
                     
                     // print results to csv file
                     printCSV(size, x, timeArray, sortType, min, max, average);
+                 testResultsHere[index].setInfoR(sortType, size, min, max, average);
 
                 } // close else 
                 break;
@@ -364,6 +402,8 @@ public class ComparingSortingAlgorithms211 {
                 
                 // print time results to csv 
                 printCSV(size, x, timeArray, sortType, min, max, average);
+                
+                testResultsHere[index].setInfoR(sortType, size, min, max, average);
                 break;
 
             case 5:	// Merge Sort
@@ -423,6 +463,7 @@ public class ComparingSortingAlgorithms211 {
                 } // close for loop
                 // print time results to csv
                 printCSV(size, x, timeArray, sortType, min, max, average);
+                testResultsHere[index].setInfoR(sortType, size, min, max, average);
                 break;
 
             default: // default case
@@ -690,7 +731,7 @@ public class ComparingSortingAlgorithms211 {
 ////////////////////////////////////////////////////////////////////////////////
     public static double calculateDuration(long startTime) {
 
-        double time;
+        double time;  
         int billion = 1000000000; // 1 billion
         long endTime = System.nanoTime();
 
@@ -809,6 +850,67 @@ public static double calculateMax(double[]array){
 
 
 } // close calculateMax
+
+////////////////////////////////////////////////////////////////////////////////     
+// this method creates a csv file with all data in the Results object array
+//////////////////////////////////////////////////////////////////////////////// 
+    public static void printAllCSV(Results[]allResults) throws FileNotFoundException {
+
+        // create a File class object 
+        java.io.File testResult = new java.io.File("alldata.csv");
+
+        // Create a PrintWriter text output stream and link it to the file
+        java.io.PrintWriter outfile = new java.io.PrintWriter(testResult);
+        
+        
+        String sortType; 
+        int size; 
+        double avg;
+        double min; 
+        double max;
+        
+        
+        for(int i = 0; i < allResults.length; i++){
+        
+        
+       
+        sortType = allResults[i].getType();
+        size = allResults[i].getSize();
+        avg = allResults[i].getAverage();
+        min = allResults[i].getMin();
+        max = allResults[i].getMax();
+       
+       
+       outfile.println(); // print a row for space
+        outfile.print(sortType); // sort type header
+        outfile.print(","); // move right one column
+        outfile.print(size); // print the size header
+        
+        outfile.println(); // print another row 
+        outfile.print("average"); // average row label
+        outfile.print(","); // move right one column
+        outfile.print(avg); // move right one column
+        
+        outfile.println(); // print another row 
+        outfile.print("max"); // max row label
+        outfile.print(","); // move right one column
+        outfile.print(max); // move right one column
+        
+        outfile.println(); // print another row 
+        outfile.print("min"); // min row label
+        outfile.print(","); // move right one column
+        outfile.print(min); // move right one column
+        
+        
+        }
+        
+
+        //close file
+        outfile.close();
+
+    }
+
+
 
 ////////////////////////////////////////////////////////////////////////////////     
 // this method creates a csv file each time a sort method is test for a given size

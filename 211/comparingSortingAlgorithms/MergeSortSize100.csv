@@ -1,0 +1,9 @@
+MergeSort
+Size: 100
+Pass 1,Pass 2,Pass 3,Pass 4,Pass 5,Pass 6,Pass 7,Pass 8,Pass 9,Pass 10,
+2.65406E-4,1.79079E-4,1.77754E-4,9.0395E-5,2.8545E-5,3.6317E-5,3.2447E-5,8.3415E-5,2.8995E-5,5.0539E-5,
+
+MergeSort,100
+average,9.72892E-5
+max,2.65406E-4
+min,2.8545E-5

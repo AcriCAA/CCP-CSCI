@@ -1,0 +1,9 @@
+SelectionSort
+Size: 100
+Pass 1,Pass 2,Pass 3,Pass 4,Pass 5,Pass 6,Pass 7,Pass 8,Pass 9,Pass 10,
+3.67362E-4,3.055E-4,2.0916E-4,1.97361E-4,1.94488E-4,1.79638E-4,7.65906E-4,1.73027E-4,1.97976E-4,1.73228E-4,
+
+SelectionSort,100
+average,2.7636459999999996E-4
+max,7.65906E-4
+min,1.73027E-4

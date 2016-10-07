@@ -1,0 +1,9 @@
+InsertionSort
+Size: 100
+Pass 1,Pass 2,Pass 3,Pass 4,Pass 5,Pass 6,Pass 7,Pass 8,Pass 9,Pass 10,
+1.28587E-4,2.6355E-4,1.05073E-4,0.001134545,2.61264E-4,1.51935E-4,1.33039E-4,1.9942E-4,1.41122E-4,1.91524E-4,
+
+InsertionSort,100
+average,2.710059E-4
+max,0.001134545
+min,1.05073E-4
