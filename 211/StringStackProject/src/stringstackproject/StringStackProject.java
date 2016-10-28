@@ -3,7 +3,7 @@ Corey Acri
 CSCI 211
 Stack assignment
 
-Create an array of Strings, and using a stack, reverse the order of the Strings in the array.
+Creates an array of Strings, and using a stack, reverse the order of the Strings in the array.
 
 For example, the strings in the array might be “Joe”, Fred, “Mary”.  The reversed array would be “Mary”, Fred, “Joe”.
 
@@ -108,24 +108,7 @@ public class StringStackProject {
     
     }
  
-//=============================================================================
-//this method prints a section break for formatting 
-//=============================================================================
-public static void sectionBreak(){
 
-System.out.println("=============================================================\n");
-
-}
-
-//=============================================================================
-// this method prints a header for console formatting 
-//=============================================================================
-public static void header(String s){
-
-System.out.println("=============================================================");
-        System.out.println(s);
-        System.out.println("=============================================================");
-}
 
     
 //=============================================================================
@@ -206,6 +189,24 @@ public static void loadDataFile(String fileName, String [] sArray)
 
     } // endLoadArray
 //=============================================================================
-           
+
+//=============================================================================
+//this method prints a section break for formatting 
+//=============================================================================
+public static void sectionBreak(){
+
+System.out.println("=============================================================\n");
+
+}
+
+//=============================================================================
+// this method prints a header for console formatting 
+//=============================================================================
+public static void header(String s){
+
+System.out.println("=============================================================");
+        System.out.println(s);
+        System.out.println("=============================================================");
+}
     
 }
