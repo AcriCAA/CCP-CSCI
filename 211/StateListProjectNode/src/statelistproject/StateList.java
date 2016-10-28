@@ -19,7 +19,7 @@ public class StateList {
     // list node
     private listNode head;
     
-    private int numberOfStates = 100; // initially an array of 100 states  
+    private int numberOfStates = 100; // initially assuming a list of 100 states  
    
     
     
@@ -114,9 +114,56 @@ public class StateList {
 
       return tmp.data;
    }
-
-
-  
+   
+   
+   
+// from class notes to iterate through node? 
+// if we are adding a node 
+  // 1 declare a new node
+   // 2 put pbject in the new node 
+   
+   public void iterate(){
+   if (head == null){
+        // special case, list is empty
+       System.out.println("list is empty");
+   }
+   else {
+       listNode current = head; 
+       while(current.next != null) {
+       // node processing if any 
+       current = current.next;  
+       
+      // System.out.println("Current node data:" + current.data);
+      // return current.data;
+       }
+   }
+   //return head.data;
+   }
+   
+   
+  public State findAState(String stateName){
+      
+   boolean found = false; 
+   listNode current = head; 
+   
+   if (head == null){
+        // special case, list is empty
+       System.out.println("list is empty");
+   }
+   else {
+       
+       while(current.next != null && !found) {
+       // node processing if any 
+       current = current.next;  
+       
+      // compare stateName to current.data.stateName
+      // System.out.println("Current node data:" + current.data);
+      // return current.data;
+       }
+   }
+   return current.data;
+        
+        }
    
     
 //=============================================================================
@@ -154,7 +201,7 @@ public int countFile(String fileName) throws Exception
     
 
 //=============================================================================
-// This method loads the array of states from a file    
+// This method loads the list of states from a file    
 //=============================================================================
 public void loadDataFile(String fileName)
         throws Exception
@@ -219,7 +266,7 @@ public void loadDataFile(String fileName)
 //=============================================================================
   
 //=============================================================================
-//This method prints the full array of states on the screen. 
+//This method prints the full list of states on the screen. 
 //=============================================================================
     public void displayAllStates() {
 
@@ -235,6 +282,11 @@ public void loadDataFile(String fileName)
            tempState = get(i);
            
            
+           //current.getdata
+           
+           //x = current.getdata
+           
+           
            System.out.println(tempState.toString());
             
      
@@ -242,7 +294,7 @@ public void loadDataFile(String fileName)
       
       }
 
-
+       
         
     } // end displayStates()   
 //============================================================================= 
@@ -257,7 +309,7 @@ public void findState () {
         
         String currentStateName = "";
         boolean foundMatchForInput = false;
-        String input = ""; // input string 
+        String input = ""; //    input string 
         State tempState = new State(); 
 
         // startup message to use
@@ -312,7 +364,7 @@ public void findState () {
 
                         System.out.print("\nSorry, could not find a matching state\n"
                                 + "============================================================="
-                        +"\nTry entering a state name again or \"type \\\":wq\\\" at anytime to quit program\n"
+                        +"\nTry entering a state name again or type \":wq\" at anytime to quit program\n"
                                 + "=> "); 
 
                 }                

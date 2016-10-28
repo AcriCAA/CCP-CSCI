@@ -3,7 +3,7 @@
  * CSCI 211
  * This project loads a list of States from a data file into a State list object
  * and then allows the user to search for information on the capital and population 
- * for a given state name
+ * for a given state name. The data structure used is a List.
  */
 package statelistproject;
 
