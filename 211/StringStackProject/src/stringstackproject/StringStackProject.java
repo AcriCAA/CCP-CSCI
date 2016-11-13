@@ -36,20 +36,26 @@ public class StringStackProject {
     public static void main(String[] args) throws Exception {
         // TODO code application logic here
         
+        //declare the stack
+        StringStack sStack = new StringStack();
         
-        StringStack sStack = new StringStack(); 
+       
+        
+        // temporary value for Strings that will be pushed onto Stack
+        String tmp = "none";
+        
+      
+        
+     
         
         int fileLength = countFile("statedata.txt");
         
         String [] array = new String[fileLength];
         loadDataFile("statedata.txt", array);
         
-        //String[] array = {"Joe", "Fred", "Mary","Jane","John","Jimmy","Jesse"}; 
-        
-        // temporary value for Strings that will be pushed onto Stack
-        String tmp = "none";
         
         //for testing
+        // String [] array = {"Joe", "Fred", "Mary","Jane","John","Jimmy","Jesse"}; 
         //sStack.push(tmp);
         //sStack.printTopValue(); 
         
