@@ -1,4 +1,6 @@
-/* CityProject.java  -- project class file with the project's main method 
+/* Corey Acri 
+ * CSCI 211
+ * CityProject.java  -- project class file with the project's main method 
  *
  *  * The CityProject software package creates a graph of cities in the Unitied 
  * States with links between the cities. Each city is a vertex in the graph.
@@ -28,6 +30,8 @@
  *
  * created for use by students in CSCI 211 at Community Colle of Philadelphia
  * copyright 2014 by C. herbert.  last edited Nov. 23, 2014 by C. Herbert
+ *
+ * modified by Corey Acri December 2016 to include Dikstra's Algorithm analysis
  */
 
 package cityproject;
@@ -36,11 +40,18 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.*;
+import static java.lang.Integer.MAX_VALUE;
+
 
 public class CityProject {
 
     // main metod for the project
     public static void main(String[] args) {
+        
+        // scanner for input
+        Scanner kb = new Scanner(System.in);
+        String startCityName = "no name"; 
+        String destinationCityName = "no name"; 
 
         City[] cities = new City[200]; //array of cities (Vertices) max = 200
         for (int i = 0; i < cities.length; i++) {
@@ -63,15 +74,417 @@ public class CityProject {
 
         // create the adjacency list for each city based on the link array
         createAdjacencyLists(cityCount, cities, linkCount, links);
+        
+        
 
         // print adjacency lists for all cities
-        PrintAdjacencyLists(cityCount, cities);
+//        PrintAdjacencyLists(cityCount, cities);
 
         // instatiate a new scrollable map of the cities and links
-         DrawScrollableMap(cityCount, cities, linkCount, links);
+//         DrawScrollableMap(cityCount, cities, linkCount, links);
 
+
+// Corey Modifications
+
+    //stackCities(cities); // testing
+    
+    
+        printGetStartCity();
+        startCityName = getCityNameFromUser(kb, cities);
+//       
+      printGetDestinationCity();
+       destinationCityName = getCityNameFromUser(kb, cities);
+
+ dijkstratize(cities, startCityName, destinationCityName, cityCount);
+        
     } // end main
     //************************************************************************
+  
+    
+    /*************************************************************************** 
+    * dijkstratize() 
+    * runs Dijkstra's Algorithm to find the shortest path between two cities
+    ***************************************************************************/ 
+    public static void dijkstratize(City [] cities, String startCity, String endCity, int cityCount){
+    
+    
+    City currentVertex = new City(); // create variable for currentVertex
+    City destinationVertex = new City(); // destination 
+    
+    // Set the currentVertex to be the source vertex. 
+    currentVertex = findCity(cities, startCity);
+    destinationVertex = findCity(cities, endCity);
+    
+    
+    // Set its bestDistance to be zero, 
+    currentVertex.setBestDistance(0);
+    
+    //and leave its immediatePredecessor null.
+    currentVertex.setImmediatePredecessor(null);
+    
+
+    
+    
+    int uHasMembers = Integer.MAX_VALUE;
+    
+    
+    
+    CityStack uStack = new CityStack();
+    buildUStack(uStack, cities, cityCount);
+    
+    CityStack destinationStack = new CityStack();
+    
+    while(uHasMembers > 0){
+        
+         // Step a. For each vetex adjacent to currentVertex, determine if there is 
+         // a new shortest path to vertices adjacent to currentVertex through currentVertex.
+         // If there is a new shortest path to a vertex through the currentVertex
+         // update its bestDistance and immediatePredecessor values
+         determineBestDistance(currentVertex);
+         
+         // b. Mark current Vertex as Visited
+         currentVertex.setVisited(true);
+        
+        //update currentVertex to be the vertex from U with the shortest bestDistance
+        currentVertex = vertexFromUBestDistance(uStack);
+        
+        
+        
+        buildUStack(uStack, cities, cityCount);
+        uHasMembers = uStack.count();
+        System.out.println("U members:" + uHasMembers);
+       //uHasMembers = false; 
+    
+    } // end while 
+    
+    buildDestinationStack(destinationVertex, destinationStack);
+    printResult(destinationStack);
+    
+    } // end dijkastra's 
+    
+    public static void printResult(CityStack dStack){
+    
+    City tempCity = new City(); 
+        System.out.println("==============\nFINAL ROUTE================\n"); 
+    while(dStack.count() > 0){
+        tempCity = dStack.pop(); 
+        
+        System.out.println(tempCity.getName()); 
+    
+    }
+    
+    
+    } // close print result
+    
+    public static void buildDestinationStack(City dVertex, CityStack dStack){
+    
+        City tempVertex = dVertex; 
+        
+           while(tempVertex.getImmediatePredecessor() != null){
+           
+           dStack.push(tempVertex);
+           tempVertex = tempVertex.getImmediatePredecessor();
+           
+           }
+    
+    }
+    
+    public static void buildUStack(CityStack uStack, City [] cities,int cityCount){
+    
+        boolean visited; 
+        for(int i = 0; i < cityCount;i++){
+        
+        if(cities[i] != null){ // first verify the node is not empty to avoid errors
+            visited = cities[i].getVisited();
+        
+            if(visited == false){
+                uStack.push(cities[i]);
+                System.out.println("Pushing" + cities[i].getName());
+            }
+         
+        }
+        
+        } // close loop to go through cities
+        
+        // now pop the stack and determine City with the best distance
+        int size = uStack.count(); 
+        System.out.println("Stack size is: "+ size);
+        
+    
+    
+    }
+    
+    
+    
+    public static City vertexFromUBestDistance(CityStack uStack){
+    
+       
+       
+       City bestCity = new City();  
+        
+       //pop off the stack 
+       
+      int size = uStack.count(); 
+       
+       for(int j = 0; j<size; j++){
+           
+           bestCity = uStack.pop();
+           determineBestDistance(bestCity);
+           System.out.println("Best City So Far" + bestCity.getName());            
+       }
+    
+    return bestCity; 
+    } // close verFromBestDistance
+    
+    /*************************************************************************** 
+    * checkU() 
+    * check to see if U still has members (i.e. whether cities have been visited
+    ***************************************************************************/   
+    public static boolean checkU(City [] cities, int cityCount){
+        
+
+   boolean visited = true; // assume they have all been visited to start
+    int i = 0;   
+    while(visited == true){ // you only loop through until you find an unvisited 
+    
+    
+                if (cities[i].getName() != null){
+                    
+                     visited = cities[i].getVisited();
+                     if (visited == true)
+                     System.out.println(cities[i].getName() + "has been visited ");
+                     if (visited == false)
+                         System.out.println(cities[i].getName() + "has NOT been visited ");
+                } // null check
+            i++; 
+    
+    }
+    
+    if (visited == false) // if a city hasn't been visited than U has members so return true
+        return true; 
+    else 
+        return false; 
+    
+        
+        
+    
+    
+    
+        }
+    /*************************************************************************** 
+    * determineBestDistance() 
+    * this is 
+    ***************************************************************************/  
+    
+   public static void determineBestDistance(City currentVertex){
+// set current to adjacency list for this city
+
+
+// you need to do something like this 
+
+if currentVertex.bestDistance + currentVertexNeighbor.getCDistance
+           currentVertexNeighbor.bestDistance = currentVertex.bestDistance + currentVertexNeighbor.getCDistance
+                   
+          
+                       current = current.getNext();
+
+
+
+
+    int bestDistance = Integer.MAX_VALUE; //  placeholder for best distance
+    int tempDistance; // temp value for distance grabbed from Adjancency Node List
+
+    City tempCity; // for testing  
+    
+    String t; // temp string value 
+    
+            AdjacencyNode current = currentVertex.getAdjacencyListHead();
+
+            // print city name
+            System.out.println("\nFrom " + currentVertex.getName());
+
+            // iterate adjacency list and print each node's data
+            while (current != null) {
+                System.out.println("\t" + current.toString());
+                tempDistance = current.getcDistance();
+                if (tempDistance < bestDistance) {
+                    bestDistance = tempDistance;
+                    currentVertex.setBestDistance(bestDistance);
+                    currentVertex.setImmediatePredecessor(current.getCity());
+                   System.out.println("Current Vertex Best Distance:" + currentVertex.getBestDistance());
+                   tempCity = currentVertex.getImmediatePredecessor();
+                   t = tempCity.getName();
+                   System.out.println("Current Vertex Immediate Predecessor:" + t);
+                }
+                
+                
+                        
+                current = current.getNext();
+            } // end while (current != null) 
+    }
+    
+    /*************************************************************************** 
+    * stackCities() 
+    * method to test putting cities in a stack 
+    ***************************************************************************/ 
+    public static void stackCities(City [] cities){
+    
+    CityStack stackedCities = new CityStack();
+    
+    City temp = new City(); // temp for City to be used for popping
+    String cityName = "no name"; 
+    
+        System.out.println("Length of Cities Array = " + cities.length); 
+    
+    for(int i = 0; i < cities.length; i++){
+    
+        cityName = cities[i].getName(); 
+        
+        if (cityName != null) 
+            stackedCities.push(cities[i]);
+    
+    }
+    
+    int stackSize = stackedCities.count(); 
+    System.out.println("Stack size = " + stackSize);
+    
+    
+    for(int j = 0; j < stackSize; j++){
+    temp = stackedCities.pop(); 
+        System.out.println(temp); 
+    
+    }
+    
+    } // close stackCities
+    
+    /*************************************************************************** 
+    * printGetStartCity() 
+    * prompts the user for the starting city name 
+    ***************************************************************************/ 
+    public static void printGetStartCity() {
+   
+        System.out.println("=============================================================");
+        System.out.println("Please enter the city name for your starting point:");
+          
+    }
+    
+    
+       /*************************************************************************** 
+    * printGetDetinationCity() 
+    * prompts the user for the starting city name 
+    ***************************************************************************/ 
+    public static void printGetDestinationCity() {
+   
+        System.out.println("=============================================================");
+        System.out.println("Please enter the city name for your ending point:");
+          
+    }
+    
+    
+    
+    /*************************************************************************** 
+    * printCityList(City [] cities)
+    * prints a formatted list of existing cities 
+    ***************************************************************************/ 
+    public static void printCityList(City [] cities){
+    
+        String currentCityName = "no name";
+        
+        System.out.println("=============================================================");
+        System.out.println("These are your choices for cities:");
+            
+          for (int i = 0; i < cities.length; i++){
+                
+                
+                currentCityName = cities[i].getName(); 
+                    
+
+              if (currentCityName != null){ // checking if currentCityName has a string value
+                  System.out.printf("%20s",currentCityName); 
+
+                       } // close if 
+              
+              if (i % 3 == 0 && currentCityName != null){ // print a line every three cities
+                  System.out.print("\n"); 
+              
+              }
+              
+             
+             } //close loop  
+          
+           System.out.println("\n\n"); // add some padding at the end 
+              
+    }
+        
+    /*************************************************************************** 
+    * String getCityNameFromUser(Scanner kb, City [] cities)
+    * prompts the user for the starting or destination city name 
+    ***************************************************************************/ 
+    public static String getCityNameFromUser(Scanner kb, City [] cities){
+
+       
+        
+        
+        String currentCityName = "";
+        boolean foundMatchForInput = false;
+        String input = ""; // input string 
+        
+
+        
+        
+        do {
+         // input n -- prompt & capture 
+        
+           
+        input = kb.nextLine();
+        
+        if (input.compareTo("list cities") == 0){
+        
+        printCityList(cities);
+        
+        }
+       
+                for (int i = 0; i < cities.length; i++){
+                
+                
+                currentCityName = cities[i].getName(); 
+                  
+
+              if (currentCityName != null){ // checking if currentCityName has a string value
+                if(currentCityName.compareToIgnoreCase(input) == 0) {
+                          System.out.println("***** Found Match ****");
+                          foundMatchForInput = true; 
+                          
+                       }
+              }
+                                     
+                } // close for loop
+                
+                if(foundMatchForInput == false) {
+
+                        System.out.print(
+                        "============================================================="
+                        +"\nTry entering the city name again\n"
+                                +" Type \"list cities\" for a list of city names"
+           
+                                + " You can \"type \\\":wq\\\" at anytime to quit program\n"
+                                + "=> "); 
+
+                }                        
+            
+          
+        } while (input.compareTo(":wq") != 0 && foundMatchForInput == false);
+        
+        return input; 
+        
+    }
+                
+        
+                           
+                    
+                
+    
+    
     
     
     /*************************************************************************** 

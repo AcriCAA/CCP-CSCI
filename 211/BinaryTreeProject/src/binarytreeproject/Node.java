@@ -26,9 +26,9 @@ public class Node {
     
     }
     
-    public void toString(){
+    public String toString(){
         
-        System.out.println("Value =" + value);
+        return "Value = " + value;
     
     }
     

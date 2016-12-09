@@ -1,2 +1,0 @@
-monopoly.BoardSquare
-monopoly.Monopoly
