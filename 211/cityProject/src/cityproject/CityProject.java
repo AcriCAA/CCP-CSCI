@@ -154,19 +154,19 @@ public class CityProject {
         vertexFromUWithShortestBestDistance = vertexFromUBestDistance(cities, cityCount, currentVertex);
         currentVertex = vertexFromUWithShortestBestDistance;
         
-        System.out.println("Current Vertex now: " + currentVertex.getName()); 
+      
         
         
         
         
         uHasMembers = uCount(cities, cityCount); 
-        System.out.println("U members:" + uHasMembers);
-       //uHasMembers = false; 
+        
+       
     
     } // end while 
     
     buildDestinationStack(destinationVertex, destinationStack);
-    printResult(destinationStack, destinationVertex.getName());
+    printResult(destinationStack, startCity);
     
     } // end dijkastra's 
     
@@ -201,28 +201,20 @@ public class CityProject {
             tempCity = findCity(cities, currentVertex.getName());
     
             AdjacencyNode current = tempCity.getAdjacencyListHead();
-//            currentCity = current.getCity(); 
-            System.out.println("Current city in getbestdistance is: " + tempCity.getName()); 
-
-            // print city name
-            System.out.println("\nFrom " + currentVertex.getName());
 
             // iterate adjacency list and print each node's data
             while (current != null) {
                 
                 currentCity = current.getCity();
                 
-//                currentVertexBestDistance = currentCity.getBestDistance();
-//                System.out.println(currentVertexBestDistance);
-//                
                 adjacentVertexDistance = current.getcDistance();
-                System.out.println(adjacentVertexDistance);
+
                 
                 currentAdjacentCity = current.getCity();
-                System.out.println("Current adjacent city is " + currentAdjacentCity.getName());
+
                
                 adjacentVertexBestDistance = currentAdjacentCity.getBestDistance(); // get the value for the best distance from the adjacent node
-                System.out.println("adjacentVertexBestDistance"+adjacentVertexBestDistance);
+
                 
               
 //                distanceThroughCurrentVertex = adjacentVertexDistance + currentVertexBestDistance; 
@@ -233,15 +225,14 @@ public class CityProject {
                 //currentAdjacentCity = findCity(cities, currentAdjacentCity.getName());
                 // set the best distance and immediate predecessor    
                 currentAdjacentCity.setBestDistance(distanceThroughCurrentVertex);
-                    System.out.println("best distance set to" + currentAdjacentCity.getBestDistance()); 
                 currentAdjacentCity.setImmediatePredecessor(tempCity);
                 
                 
                 } // close if
                 
               
-                current = current.getNext(); //this is not iterating through the list for some reason 
-//                System.out.println(current.toString());
+                current = current.getNext(); //get next adjancey node
+
                 
             } // end while (current != null) 
             
@@ -329,7 +320,7 @@ public class CityProject {
     ***************************************************************************/ 
     public static City vertexFromUBestDistance(City [] cities, int cityCount, City currentVertex){
     
-       System.out.println("Current vertex in vertexFromUBestDistance()" + currentVertex); 
+       
        
        City bestCity = new City();  
        City tempCity = new City(); // temp city to compare values
@@ -361,12 +352,10 @@ public class CityProject {
        while (currentUStack.count() > 0){
        
        tempCity = currentUStack.pop(); 
-           System.out.println("popped " + tempCity.getName()); 
-           System.out.println("temp city best distance: " + tempCity.getBestDistance());
-           System.out.println("best city best distance:" + bestCity.getBestDistance());
+         
        if(tempCity.getBestDistance() < bestCity.getBestDistance()){
            bestCity = tempCity; 
-           System.out.println("Best City So Far" + currentVertex.getName());               
+                     
           }
        
        } // close while
@@ -428,7 +417,7 @@ public class CityProject {
     }
     
     
-       /*************************************************************************** 
+    /*************************************************************************** 
     * printGetDetinationCity() 
     * prompts the user for the starting city name 
     ***************************************************************************/ 
