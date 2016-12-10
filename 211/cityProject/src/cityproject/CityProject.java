@@ -81,7 +81,7 @@ public class CityProject {
 //        PrintAdjacencyLists(cityCount, cities);
 
         // instatiate a new scrollable map of the cities and links
-//         DrawScrollableMap(cityCount, cities, linkCount, links);
+         DrawScrollableMap(cityCount, cities, linkCount, links);
 
 
 // Corey Modifications
@@ -89,18 +89,20 @@ public class CityProject {
     //stackCities(cities); // testing
     
     
-        printGetStartCity();
-        startCityName = getCityNameFromUser(kb, cities);
-//       
+       printGetStartCity();
+       startCityName = getCityNameFromUser(kb, cities);
+              
       printGetDestinationCity();
-       destinationCityName = getCityNameFromUser(kb, cities);
+      destinationCityName = getCityNameFromUser(kb, cities);
+       
 
- dijkstratize(cities, startCityName, destinationCityName, cityCount);
+     dijkstratize(cities, startCityName, destinationCityName, cityCount);
         
     } // end main
     //************************************************************************
   
     
+
     /*************************************************************************** 
     * dijkstratize() 
     * runs Dijkstra's Algorithm to find the shortest path between two cities
@@ -130,7 +132,8 @@ public class CityProject {
     
     
     CityStack uStack = new CityStack();
-    buildUStack(uStack, cities, cityCount);
+    City vertexFromUWithShortestBestDistance = new City(); 
+    
     
     CityStack destinationStack = new CityStack();
     
@@ -140,32 +143,135 @@ public class CityProject {
          // a new shortest path to vertices adjacent to currentVertex through currentVertex.
          // If there is a new shortest path to a vertex through the currentVertex
          // update its bestDistance and immediatePredecessor values
-         determineBestDistance(currentVertex);
+         determineBestDistance(currentVertex, cities, cityCount);
          
-         // b. Mark current Vertex as Visited
-         currentVertex.setVisited(true);
+         // Step b. Mark current Vertex as Visited
+       // setVisited(currentVertex, cities, cityCount);
+        
+        currentVertex.setVisited(true);
         
         //update currentVertex to be the vertex from U with the shortest bestDistance
-        currentVertex = vertexFromUBestDistance(uStack);
+        vertexFromUWithShortestBestDistance = vertexFromUBestDistance(cities, cityCount, currentVertex);
+        currentVertex = vertexFromUWithShortestBestDistance;
+        
+        System.out.println("Current Vertex now: " + currentVertex.getName()); 
         
         
         
-        buildUStack(uStack, cities, cityCount);
-        uHasMembers = uStack.count();
+        
+        uHasMembers = uCount(cities, cityCount); 
         System.out.println("U members:" + uHasMembers);
        //uHasMembers = false; 
     
     } // end while 
     
     buildDestinationStack(destinationVertex, destinationStack);
-    printResult(destinationStack);
+    printResult(destinationStack, destinationVertex.getName());
     
     } // end dijkastra's 
     
-    public static void printResult(CityStack dStack){
+    
+    
+    /*************************************************************************** 
+    * determineBestDistance() 
+    * this is 
+    ***************************************************************************/  
+    
+   public static void determineBestDistance(City currentVertex, City [] cities, int cityCount){
+// set current to adjacency list for this city
+
+
+
+
+
+    
+    int bestDistance = Integer.MAX_VALUE; //  placeholder for best distance
+    int currentVertexBestDistance; 
+    int adjacentVertexDistance; // distance to adjacent vertex
+    int adjacentVertexBestDistance = 0 ; // best distance currently stored in the adjacent city
+    int tempDistance; // temp value for distance grabbed from Adjancency Node List
+    int distanceThroughCurrentVertex = 0;  // shortest path
+
+    City currentCity = new City(); 
+    City currentAdjacentCity = new City(); 
+    City tempCity = new City(); // for testing  
+    
+    String setCurrentCityName; // temp string value to grab 
+    
+            tempCity = findCity(cities, currentVertex.getName());
+    
+            AdjacencyNode current = tempCity.getAdjacencyListHead();
+//            currentCity = current.getCity(); 
+            System.out.println("Current city in getbestdistance is: " + tempCity.getName()); 
+
+            // print city name
+            System.out.println("\nFrom " + currentVertex.getName());
+
+            // iterate adjacency list and print each node's data
+            while (current != null) {
+                
+                currentCity = current.getCity();
+                
+//                currentVertexBestDistance = currentCity.getBestDistance();
+//                System.out.println(currentVertexBestDistance);
+//                
+                adjacentVertexDistance = current.getcDistance();
+                System.out.println(adjacentVertexDistance);
+                
+                currentAdjacentCity = current.getCity();
+                System.out.println("Current adjacent city is " + currentAdjacentCity.getName());
+               
+                adjacentVertexBestDistance = currentAdjacentCity.getBestDistance(); // get the value for the best distance from the adjacent node
+                System.out.println("adjacentVertexBestDistance"+adjacentVertexBestDistance);
+                
+              
+//                distanceThroughCurrentVertex = adjacentVertexDistance + currentVertexBestDistance; 
+                distanceThroughCurrentVertex = adjacentVertexDistance + currentVertex.getBestDistance(); 
+                
+                
+                if(distanceThroughCurrentVertex < currentAdjacentCity.getBestDistance()){
+                //currentAdjacentCity = findCity(cities, currentAdjacentCity.getName());
+                // set the best distance and immediate predecessor    
+                currentAdjacentCity.setBestDistance(distanceThroughCurrentVertex);
+                    System.out.println("best distance set to" + currentAdjacentCity.getBestDistance()); 
+                currentAdjacentCity.setImmediatePredecessor(tempCity);
+                
+                
+                } // close if
+                
+              
+                current = current.getNext(); //this is not iterating through the list for some reason 
+//                System.out.println(current.toString());
+                
+            } // end while (current != null) 
+            
+            
+    } // close determineBestDistance
+    
+    /*************************************************************************** 
+    * setVisited() 
+    * 
+    ***************************************************************************/ 
+    public static void setVisited(City currentVertex, City[] cities, int cityCount){
+    
+    City cityToModify = new City(); // temp object to set visited value
+    
+    cityToModify = findCity(cities, currentVertex.getName());
+    
+    cityToModify.setVisited(true);
+    
+  
+    }
+    
+    /*************************************************************************** 
+    * printResult() 
+    * 
+    ***************************************************************************/ 
+    public static void printResult(CityStack dStack, String startCityName){
     
     City tempCity = new City(); 
-        System.out.println("==============\nFINAL ROUTE================\n"); 
+        System.out.println("\n==============FINAL ROUTE================\n"); 
+        System.out.println("From " + startCityName); 
     while(dStack.count() > 0){
         tempCity = dStack.pop(); 
         
@@ -176,6 +282,11 @@ public class CityProject {
     
     } // close print result
     
+    
+    /*************************************************************************** 
+    * buildDestinationStack() 
+    * 
+    ***************************************************************************/ 
     public static void buildDestinationStack(City dVertex, CityStack dStack){
     
         City tempVertex = dVertex; 
@@ -189,139 +300,87 @@ public class CityProject {
     
     }
     
-    public static void buildUStack(CityStack uStack, City [] cities,int cityCount){
+    /*************************************************************************** 
+    * uCount()
+    * 
+    ***************************************************************************/ 
+    public static int uCount(City []cities, int cityCount){
     
-        boolean visited; 
-        for(int i = 0; i < cityCount;i++){
-        
-        if(cities[i] != null){ // first verify the node is not empty to avoid errors
-            visited = cities[i].getVisited();
-        
-            if(visited == false){
-                uStack.push(cities[i]);
-                System.out.println("Pushing" + cities[i].getName());
+    int uCounter = 0; 
+    
+        for(int i = 0; i < cityCount; i++){
+            if(cities[i].getVisited() == false){
+            
+                  uCounter++; 
+            
             }
-         
+
         }
-        
-        } // close loop to go through cities
-        
-        // now pop the stack and determine City with the best distance
-        int size = uStack.count(); 
-        System.out.println("Stack size is: "+ size);
-        
     
-    
+        return uCounter; 
+   
     }
+   
     
     
+    /*************************************************************************** 
+    * vertexFromUBestDistance()
+    * 
+    ***************************************************************************/ 
+    public static City vertexFromUBestDistance(City [] cities, int cityCount, City currentVertex){
     
-    public static City vertexFromUBestDistance(CityStack uStack){
-    
-       
+       System.out.println("Current vertex in vertexFromUBestDistance()" + currentVertex); 
        
        City bestCity = new City();  
-        
-       //pop off the stack 
+       City tempCity = new City(); // temp city to compare values
+       boolean tempVisited; 
        
-      int size = uStack.count(); 
        
-       for(int j = 0; j<size; j++){
-           
-           bestCity = uStack.pop();
-           determineBestDistance(bestCity);
-           System.out.println("Best City So Far" + bestCity.getName());            
-       }
-    
-    return bestCity; 
-    } // close verFromBestDistance
-    
-    /*************************************************************************** 
-    * checkU() 
-    * check to see if U still has members (i.e. whether cities have been visited
-    ***************************************************************************/   
-    public static boolean checkU(City [] cities, int cityCount){
-        
-
-   boolean visited = true; // assume they have all been visited to start
-    int i = 0;   
-    while(visited == true){ // you only loop through until you find an unvisited 
-    
-    
-                if (cities[i].getName() != null){
+   
+       CityStack currentUStack = new CityStack(); 
+     //create a stack of current u's 
+        for(int i = 0; i < cityCount; i++){
+            tempVisited = cities[i].getVisited();
                     
-                     visited = cities[i].getVisited();
-                     if (visited == true)
-                     System.out.println(cities[i].getName() + "has been visited ");
-                     if (visited == false)
-                         System.out.println(cities[i].getName() + "has NOT been visited ");
-                } // null check
-            i++; 
-    
-    }
-    
-    if (visited == false) // if a city hasn't been visited than U has members so return true
-        return true; 
-    else 
-        return false; 
-    
-        
-        
-    
-    
-    
-        }
-    /*************************************************************************** 
-    * determineBestDistance() 
-    * this is 
-    ***************************************************************************/  
-    
-   public static void determineBestDistance(City currentVertex){
-// set current to adjacency list for this city
+            if(tempVisited == false){
+ 
+                   currentUStack.push(cities[i]);
+//                   System.out.println("Pushed " + cities[i]); 
+//                   if(cities[i].getVisited() == false)
+//                       System.out.println("was not visited"); 
 
-
-// you need to do something like this 
-
-if currentVertex.bestDistance + currentVertexNeighbor.getCDistance
-           currentVertexNeighbor.bestDistance = currentVertex.bestDistance + currentVertexNeighbor.getCDistance
-                   
+            }
+        } // close for cities[] loop 
+            
+       if(currentUStack.count() > 0){
           
-                       current = current.getNext();
-
-
-
-
-    int bestDistance = Integer.MAX_VALUE; //  placeholder for best distance
-    int tempDistance; // temp value for distance grabbed from Adjancency Node List
-
-    City tempCity; // for testing  
+       bestCity = currentUStack.pop(); // arbitrarily set best city to first in stack so you have somthing to compare
+       }
+       
+       
+       while (currentUStack.count() > 0){
+       
+       tempCity = currentUStack.pop(); 
+           System.out.println("popped " + tempCity.getName()); 
+           System.out.println("temp city best distance: " + tempCity.getBestDistance());
+           System.out.println("best city best distance:" + bestCity.getBestDistance());
+       if(tempCity.getBestDistance() < bestCity.getBestDistance()){
+           bestCity = tempCity; 
+           System.out.println("Best City So Far" + currentVertex.getName());               
+          }
+       
+       } // close while
+           
+            
+        
+       
+     
+      return bestCity; 
+     
     
-    String t; // temp string value 
-    
-            AdjacencyNode current = currentVertex.getAdjacencyListHead();
-
-            // print city name
-            System.out.println("\nFrom " + currentVertex.getName());
-
-            // iterate adjacency list and print each node's data
-            while (current != null) {
-                System.out.println("\t" + current.toString());
-                tempDistance = current.getcDistance();
-                if (tempDistance < bestDistance) {
-                    bestDistance = tempDistance;
-                    currentVertex.setBestDistance(bestDistance);
-                    currentVertex.setImmediatePredecessor(current.getCity());
-                   System.out.println("Current Vertex Best Distance:" + currentVertex.getBestDistance());
-                   tempCity = currentVertex.getImmediatePredecessor();
-                   t = tempCity.getName();
-                   System.out.println("Current Vertex Immediate Predecessor:" + t);
-                }
-                
-                
-                        
-                current = current.getNext();
-            } // end while (current != null) 
-    }
+   
+    } // close verFromBestDistance
+   
     
     /*************************************************************************** 
     * stackCities() 

@@ -36,7 +36,8 @@ class City extends Vertex {
 
     // added properties
     private boolean visited = false;
-    private int bestDistance = Integer.MAX_VALUE;   //maximum value and integer can have
+//    private int bestDistance = Integer.MAX_VALUE;   //maximum value and integer can have
+    private int bestDistance = 999999999;   //maximum value and integer can have
     private City immediatePredecessor;
     private AdjacencyNode adjacencyListHead;  // link to first node in adjacency list
 
