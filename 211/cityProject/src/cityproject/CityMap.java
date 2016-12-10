@@ -67,7 +67,11 @@ public class CityMap extends JPanel {
         // draw links
         // iterate link array
         for (int i = 0; i < linkCount; i++) {
-
+           
+           // COREY trying to draw only links that pertain to city 
+          // for(int j = 0; j < cities.length; j++){
+            //   if(links[i].getSource().getName().equals(cities[j].getName()) || links[i].getDestination().getName().equals(cities[j].getName()) ){
+                //COREY trying to print only links that pertain to city
             // get soucrce city  and destination city coordinates
             int xS = links[i].getSource().getX();       // x coordinate of source city
             int yS = links[i].getSource().getY();       // y coordinate of source city
@@ -76,6 +80,8 @@ public class CityMap extends JPanel {
 
             graphics.setColor(new Color(200, 200, 200));
             graphics.drawLine(xS, yS, xD, yD);
+             //  } // COREY end inner IF
+          // } // COREY end inner for 
         } // end for
 
         // draw cities

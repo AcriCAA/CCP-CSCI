@@ -81,7 +81,7 @@ public class CityProject {
 //        PrintAdjacencyLists(cityCount, cities);
 
         // instatiate a new scrollable map of the cities and links
-         DrawScrollableMap(cityCount, cities, linkCount, links);
+        // DrawScrollableMap(cityCount, cities, linkCount, links);
 
 
 // Corey Modifications
@@ -96,7 +96,7 @@ public class CityProject {
       destinationCityName = getCityNameFromUser(kb, cities);
        
 
-     dijkstratize(cities, startCityName, destinationCityName, cityCount);
+     dijkstratize(cities, startCityName, destinationCityName, cityCount, linkCount, links);
         
     } // end main
     //************************************************************************
@@ -107,7 +107,7 @@ public class CityProject {
     * dijkstratize() 
     * runs Dijkstra's Algorithm to find the shortest path between two cities
     ***************************************************************************/ 
-    public static void dijkstratize(City [] cities, String startCity, String endCity, int cityCount){
+    public static void dijkstratize(City [] cities, String startCity, String endCity, int cityCount, int linkCount, Edge [] links){
     
     
     City currentVertex = new City(); // create variable for currentVertex
@@ -167,6 +167,10 @@ public class CityProject {
     
     buildDestinationStack(destinationVertex, destinationStack);
     printResult(destinationStack, startCity);
+    
+    //draw them on the map
+    buildDestinationStack(destinationVertex, destinationStack);
+    DrawRouteMap(cities, destinationStack,startCity, linkCount, links);
     
     } // end dijkastra's 
     
@@ -647,8 +651,8 @@ public class CityProject {
         int index = 0;  // loop counter
         // go through the cities array until the name is found
         // the name will be in the list
-
-        while (cities[index].getName().compareTo(n) != 0) {
+        // ACRICAA changed the comparison to ignore the case because was throwing error on user input
+        while (cities[index].getName().compareToIgnoreCase(n) != 0) {
 
             index++;
         }// end while()
@@ -742,6 +746,49 @@ static void PrintAdjacencyLists(int cityCount, City[] cities) {
         
         // create an instance of CityMap
         CityMap map = new CityMap(cCount, c, lCount, l);
+        
+        // put the map on a ScrollPane in the frame
+        mapFrame.add(new JScrollPane(map), BorderLayout.CENTER);
+        // show the map
+        mapFrame.setVisible(true);
+        
+    } // end DrawScrollablemap() ***********************************************
+    
+    
+    /*************************************************************************** 
+    * DrawRouteMap() creates a frame , then places
+    * an instance of the final RouteMap on the frame in a ScrollPane.
+    ***************************************************************************/ 
+    static void DrawRouteMap(City [] allCities, CityStack finalRoute, String startCity, int lCount, Edge[] l)  {
+        
+        int cCount = finalRoute.count(); 
+        
+        cCount++;  //you have to add the start City to the array so add 1 more to the city count
+        
+     City[] cities = new City[cCount]; //array of cities (Vertices) size of stack
+        for (int i = 0; i < cities.length; i++) {
+            cities[i] = new City();
+        }
+        
+        cities[0] = findCity(allCities, startCity); // add start City to array
+        
+        for(int i = 1; finalRoute.count() > 0; i++){ // start at 1 becauseyou already put int the startCity above
+        
+            cities[i] = finalRoute.pop();
+        
+        }
+        
+        // create a frame for the map
+        JFrame mapFrame = new JFrame();
+       
+        // set the frame's properties
+        mapFrame.setTitle("Selected U.S. Cities");
+        mapFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mapFrame.setLayout(new BorderLayout());
+        mapFrame.setSize(1200, 600);
+        
+        // create an instance of CityMap
+        RouteMap map = new RouteMap(cCount, cities, lCount, l);
         
         // put the map on a ScrollPane in the frame
         mapFrame.add(new JScrollPane(map), BorderLayout.CENTER);
