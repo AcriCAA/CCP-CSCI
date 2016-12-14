@@ -35,13 +35,15 @@
  * and corresponding helper methods and classes
  *
  *      * Methods Added: dijkstratize(), determineBestDistance(), setVisited(), 
- *        buildDestinationStack(), uCount(), vertexFromUBestDistance(), stackCities() 
+ *        buildDestinationStack(), uCount(), vertexFromUBestDistance(), stackCities(),
+ *        printGetStartCity(), printGetDetinationCity(), printCityList(), 
+ *        getCityNameFromUser(),  
  * 
  *      * Classes Added: 
  *        CityStack - stack of cities
  *        CityStackNode - node to be used in city stack
  *        RouteMap - adaptation of CityMap to paint only the point-to-point route
- *      
+ * 
  */
 
 package cityproject;
@@ -84,8 +86,6 @@ public class CityProject {
 
         // create the adjacency list for each city based on the link array
         createAdjacencyLists(cityCount, cities, linkCount, links);
-        
-        
 
         // print adjacency lists for all cities
         // PrintAdjacencyLists(cityCount, cities);
@@ -420,7 +420,7 @@ public class CityProject {
    
         System.out.println("=============================================================");
         System.out.println("Please enter the city name for your starting point as "
-                + "the city name and state abbreviation, e.g. New York NY:");
+                + "the city name and state abbreviation, \ne.g. New York NY:");
           
     }
     

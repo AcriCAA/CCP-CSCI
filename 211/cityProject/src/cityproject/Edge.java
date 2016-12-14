@@ -27,6 +27,20 @@
  *
  * created for use by students in CSCI 211 at Community Colle of Philadelphia
  * copyright 2014 by C. herbert.  last edited Nov. 23, 2014 by C. Herbert
+ * 
+ * modified by Corey Acri December 2016 to include Dijkstra's Algorithm analysis
+ * and corresponding helper methods and classes
+ *
+ *      * Methods Added: dijkstratize(), determineBestDistance(), setVisited(), 
+ *        buildDestinationStack(), uCount(), vertexFromUBestDistance(), stackCities(),
+ *        printGetStartCity(), printGetDetinationCity(), printCityList(), 
+ *        getCityNameFromUser(),  
+ * 
+ *      * Classes Added: 
+ *        CityStack - stack of cities
+ *        CityStackNode - node to be used in city stack
+ *        RouteMap - adaptation of CityMap to paint only the point-to-point route
+ * 
  */
 
 package cityproject;
