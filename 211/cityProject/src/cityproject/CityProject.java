@@ -31,7 +31,17 @@
  * created for use by students in CSCI 211 at Community Colle of Philadelphia
  * copyright 2014 by C. herbert.  last edited Nov. 23, 2014 by C. Herbert
  *
- * modified by Corey Acri December 2016 to include Dikstra's Algorithm analysis
+ * modified by Corey Acri December 2016 to include Dijkstra's Algorithm analysis
+ * and corresponding helper methods and classes
+ *
+ *      * Methods Added: dijkstratize(), determineBestDistance(), setVisited(), 
+ *        buildDestinationStack(), uCount(), vertexFromUBestDistance(), stackCities() 
+ * 
+ *      * Classes Added: 
+ *        CityStack - stack of cities
+ *        CityStackNode - node to be used in city stack
+ *        RouteMap - adaptation of CityMap to paint only the point-to-point route
+ *      
  */
 
 package cityproject;
@@ -40,7 +50,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.*;
 import java.io.*;
-import static java.lang.Integer.MAX_VALUE;
 
 
 public class CityProject {
@@ -50,8 +59,9 @@ public class CityProject {
         
         // scanner for input
         Scanner kb = new Scanner(System.in);
-        String startCityName = "no name"; 
-        String destinationCityName = "no name"; 
+        
+        String startCityName = "no name"; // to keep track of starting city
+        String destinationCityName = "no name"; // to keep track of ending city
 
         City[] cities = new City[200]; //array of cities (Vertices) max = 200
         for (int i = 0; i < cities.length; i++) {
@@ -78,25 +88,21 @@ public class CityProject {
         
 
         // print adjacency lists for all cities
-//        PrintAdjacencyLists(cityCount, cities);
+        // PrintAdjacencyLists(cityCount, cities);
 
         // instatiate a new scrollable map of the cities and links
         // DrawScrollableMap(cityCount, cities, linkCount, links);
 
 
-// Corey Modifications
+    // AcriCAA (Corey Acri) Modifications, December 2016
 
-    //stackCities(cities); // testing
-    
-    
-       printGetStartCity();
-       startCityName = getCityNameFromUser(kb, cities);
+      printGetStartCity();
+      startCityName = getCityNameFromUser(kb, cities);
               
       printGetDestinationCity();
       destinationCityName = getCityNameFromUser(kb, cities);
        
-
-     dijkstratize(cities, startCityName, destinationCityName, cityCount, linkCount, links);
+      dijkstratize(cities, startCityName, destinationCityName, cityCount, linkCount, links);
         
     } // end main
     //************************************************************************
@@ -110,8 +116,8 @@ public class CityProject {
     public static void dijkstratize(City [] cities, String startCity, String endCity, int cityCount, int linkCount, Edge [] links){
     
     
-    City currentVertex = new City(); // create variable for currentVertex
-    City destinationVertex = new City(); // destination 
+    City currentVertex = new City(); // variable for currentVertex
+    City destinationVertex = new City(); // variable to hold destination Vertex
     
     // Set the currentVertex to be the source vertex. 
     currentVertex = findCity(cities, startCity);
@@ -123,20 +129,26 @@ public class CityProject {
     
     //and leave its immediatePredecessor null.
     currentVertex.setImmediatePredecessor(null);
-    
-
-    
-    
+   
+    // create variable to hold the count of the number of items in the U set
+    // initialize it to the max integer value
     int uHasMembers = Integer.MAX_VALUE;
     
     
-    
+    // create a stack to hold Cities that are processed in the algorithm 
     CityStack uStack = new CityStack();
+    
+    // create an object that will hold the City with the shortest 
+    // distance in the U set 
     City vertexFromUWithShortestBestDistance = new City(); 
     
     
+    // create a CityStack that will hold the step-by-step directions from 
+    // city to city along the shortest path 
     CityStack destinationStack = new CityStack();
     
+    
+    // U is the set of unvisited cities, loop while U has members 
     while(uHasMembers > 0){
         
          // Step a. For each vetex adjacent to currentVertex, determine if there is 
@@ -145,7 +157,7 @@ public class CityProject {
          // update its bestDistance and immediatePredecessor values
          determineBestDistance(currentVertex, cities, cityCount);
          
-         // Step b. Mark current Vertex as Visited
+       // Step b. Mark current Vertex as Visited
        // setVisited(currentVertex, cities, cityCount);
         
         currentVertex.setVisited(true);
@@ -154,22 +166,23 @@ public class CityProject {
         vertexFromUWithShortestBestDistance = vertexFromUBestDistance(cities, cityCount, currentVertex);
         currentVertex = vertexFromUWithShortestBestDistance;
         
-      
-        
-        
-        
-        
+        // at the end of the loop check if U still has members
         uHasMembers = uCount(cities, cityCount); 
         
        
     
     } // end while 
     
+    // build the Stack of destination cities 
     buildDestinationStack(destinationVertex, destinationStack);
+    
+    // print the destination stack to console
     printResult(destinationStack, startCity);
     
-    //draw them on the map
+    //rebuild the destination stack (it gets emptied in prior call) 
     buildDestinationStack(destinationVertex, destinationStack);
+    
+    // draw the point-to-point route map using the destinationStack
     DrawRouteMap(cities, destinationStack,startCity, linkCount, links);
     
     } // end dijkastra's 
@@ -182,53 +195,54 @@ public class CityProject {
     ***************************************************************************/  
     
    public static void determineBestDistance(City currentVertex, City [] cities, int cityCount){
-// set current to adjacency list for this city
-
-
-
-
 
     
     int bestDistance = Integer.MAX_VALUE; //  placeholder for best distance
     int currentVertexBestDistance; 
     int adjacentVertexDistance; // distance to adjacent vertex
     int adjacentVertexBestDistance = 0 ; // best distance currently stored in the adjacent city
-    int tempDistance; // temp value for distance grabbed from Adjancency Node List
-    int distanceThroughCurrentVertex = 0;  // shortest path
+    int tempDistance; // temp value for distance grabbed from Adjacency Node List
+    int distanceThroughCurrentVertex = 0;  // shortest path through current vertex
 
     City currentCity = new City(); 
     City currentAdjacentCity = new City(); 
-    City tempCity = new City(); // for testing  
-    
-    String setCurrentCityName; // temp string value to grab 
-    
+    City tempCity = new City(); // 
+            
+            // get the city for the current vertex 
             tempCity = findCity(cities, currentVertex.getName());
     
+            // set the current adjacent node to the list head
             AdjacencyNode current = tempCity.getAdjacencyListHead();
 
-            // iterate adjacency list and print each node's data
+            // iterate through adjacency list
             while (current != null) {
                 
+                // get the current adjacent city from adjacency list
                 currentCity = current.getCity();
                 
+                // get the distance to the adjacent city vertex
                 adjacentVertexDistance = current.getcDistance();
-
                 
+                // set the current adjacent city 
                 currentAdjacentCity = current.getCity();
-
                
+                // get the best distance to the current adjacent city 
                 adjacentVertexBestDistance = currentAdjacentCity.getBestDistance(); // get the value for the best distance from the adjacent node
 
-                
-              
-//                distanceThroughCurrentVertex = adjacentVertexDistance + currentVertexBestDistance; 
+                // calculate the distance through the current vertex using the
+                // best distance in the current adjacent vertex plus the 
+                // value in current vertex bestdistance 
                 distanceThroughCurrentVertex = adjacentVertexDistance + currentVertex.getBestDistance(); 
                 
-                
+                // if the distance through the current vertex is better than 
+                // the distance in the currentAdjacent vertex 
                 if(distanceThroughCurrentVertex < currentAdjacentCity.getBestDistance()){
-                //currentAdjacentCity = findCity(cities, currentAdjacentCity.getName());
+                
                 // set the best distance and immediate predecessor    
                 currentAdjacentCity.setBestDistance(distanceThroughCurrentVertex);
+                
+                //set immediate predecessor to the tempCity (the city originally 
+                // evaluated and passed into method) 
                 currentAdjacentCity.setImmediatePredecessor(tempCity);
                 
                 
@@ -245,7 +259,8 @@ public class CityProject {
     
     /*************************************************************************** 
     * setVisited() 
-    * 
+    * uses the find city method as a double check that right city is being 
+    * set to visited
     ***************************************************************************/ 
     public static void setVisited(City currentVertex, City[] cities, int cityCount){
     
@@ -260,7 +275,7 @@ public class CityProject {
     
     /*************************************************************************** 
     * printResult() 
-    * 
+    * prints the final point-to-point directions to console
     ***************************************************************************/ 
     public static void printResult(CityStack dStack, String startCityName){
     
@@ -269,7 +284,6 @@ public class CityProject {
         System.out.println("From " + startCityName); 
     while(dStack.count() > 0){
         tempCity = dStack.pop(); 
-        
         System.out.println(tempCity.getName()); 
     
     }
@@ -280,7 +294,7 @@ public class CityProject {
     
     /*************************************************************************** 
     * buildDestinationStack() 
-    * 
+    * builds the stack for the step-by-step point-to-point directions
     ***************************************************************************/ 
     public static void buildDestinationStack(City dVertex, CityStack dStack){
     
@@ -297,17 +311,17 @@ public class CityProject {
     
     /*************************************************************************** 
     * uCount()
-    * 
+    * counts the number of items that have NOT been visited
     ***************************************************************************/ 
     public static int uCount(City []cities, int cityCount){
     
+    // initialize to 0 to represent no items in U set (unvisted cities) 
     int uCounter = 0; 
     
         for(int i = 0; i < cityCount; i++){
-            if(cities[i].getVisited() == false){
-            
+            // if the city has not been visited it falls in U set so increase counter
+            if(cities[i].getVisited() == false){ 
                   uCounter++; 
-            
             }
 
         }
@@ -316,47 +330,42 @@ public class CityProject {
    
     }
    
-    
-    
     /*************************************************************************** 
     * vertexFromUBestDistance()
-    * 
+    * finds the city with the shortest best distance from the list of unvisited 
+    * cities
     ***************************************************************************/ 
     public static City vertexFromUBestDistance(City [] cities, int cityCount, City currentVertex){
     
-       
-       
-       City bestCity = new City();  
+       City bestCity = new City();  // city with the best distance
        City tempCity = new City(); // temp city to compare values
-       boolean tempVisited; 
-       
-       
-   
+       boolean tempVisited; // holds the visited/unvisited boolean value
+
+       //create a stack to hold the unvisited cities
        CityStack currentUStack = new CityStack(); 
-     //create a stack of current u's 
+       
+       //create the stack of current u's 
         for(int i = 0; i < cityCount; i++){
             tempVisited = cities[i].getVisited();
-                    
+            
+            // check if unvisited and, if so, put it on the stack
             if(tempVisited == false){
- 
                    currentUStack.push(cities[i]);
-//                   System.out.println("Pushed " + cities[i]); 
-//                   if(cities[i].getVisited() == false)
-//                       System.out.println("was not visited"); 
-
             }
         } // close for cities[] loop 
             
+       // check that stack isn't empty to avoid error
        if(currentUStack.count() > 0){
-          
        bestCity = currentUStack.pop(); // arbitrarily set best city to first in stack so you have somthing to compare
        }
        
-       
+       // pop off the stack
        while (currentUStack.count() > 0){
        
        tempCity = currentUStack.pop(); 
-         
+       
+       // if the latest city popped off the stack has a lower best distance, set 
+       // it as the best city 
        if(tempCity.getBestDistance() < bestCity.getBestDistance()){
            bestCity = tempCity; 
                      
@@ -364,14 +373,8 @@ public class CityProject {
        
        } // close while
            
-            
-        
-       
-     
       return bestCity; 
      
-    
-   
     } // close verFromBestDistance
    
     
@@ -416,7 +419,8 @@ public class CityProject {
     public static void printGetStartCity() {
    
         System.out.println("=============================================================");
-        System.out.println("Please enter the city name for your starting point:");
+        System.out.println("Please enter the city name for your starting point as "
+                + "the city name and state abbreviation, e.g. New York NY:");
           
     }
     
@@ -460,10 +464,9 @@ public class CityProject {
                   System.out.print("\n"); 
               
               }
-              
              
              } //close loop  
-          
+           System.out.println("\n=============================================================");
            System.out.println("\n\n"); // add some padding at the end 
               
     }
@@ -474,71 +477,48 @@ public class CityProject {
     ***************************************************************************/ 
     public static String getCityNameFromUser(Scanner kb, City [] cities){
 
-       
-        
-        
-        String currentCityName = "";
+        String currentCityName = "Philadelphia PA"; // default to Philly 
         boolean foundMatchForInput = false;
         String input = ""; // input string 
-        
-
-        
+ 
         
         do {
-         // input n -- prompt & capture 
-        
-           
+         // input prompt & capture 
         input = kb.nextLine();
         
+        // print the list of city names if user types "list cities"
         if (input.compareTo("list cities") == 0){
-        
-        printCityList(cities);
-        
+            //prints entire list of cities
+            printCityList(cities);
         }
        
-                for (int i = 0; i < cities.length; i++){
-                
-                
-                currentCityName = cities[i].getName(); 
-                  
-
-              if (currentCityName != null){ // checking if currentCityName has a string value
+        for (int i = 0; i < cities.length; i++){        
+                currentCityName = cities[i].getName();       
+              if (currentCityName != null){ // first check if currentCityName has a value
                 if(currentCityName.compareToIgnoreCase(input) == 0) {
-                          System.out.println("***** Found Match ****");
-                          foundMatchForInput = true; 
-                          
+                          System.out.println("got it, " + input);
+                          foundMatchForInput = true;    
                        }
               }
                                      
-                } // close for loop
+        } // close for loop
                 
                 if(foundMatchForInput == false) {
 
                         System.out.print(
                         "============================================================="
                         +"\nTry entering the city name again\n"
-                                +" Type \"list cities\" for a list of city names"
-           
-                                + " You can \"type \\\":wq\\\" at anytime to quit program\n"
-                                + "=> "); 
-
+                                +" Type \"list cities\" for a list of city names\n"
+                                + "=> ");
                 }                        
             
           
-        } while (input.compareTo(":wq") != 0 && foundMatchForInput == false);
+        } while (foundMatchForInput == false);
         
         return input; 
         
     }
-                
-        
-                           
-                    
-                
-    
-    
-    
-    
+
     /*************************************************************************** 
     * readCities() reads city data into an array from a data file.  The data   
     * file should be a CSV file with the city name and coordinates. City names 
@@ -651,7 +631,7 @@ public class CityProject {
         int index = 0;  // loop counter
         // go through the cities array until the name is found
         // the name will be in the list
-        // ACRICAA changed the comparison to ignore the case because was throwing error on user input
+        // AcriCAA changed the comparison to ignore the case because was throwing error on user input
         while (cities[index].getName().compareToIgnoreCase(n) != 0) {
 
             index++;
@@ -707,7 +687,7 @@ public class CityProject {
     * PrintAdjacencyLists() print the adjacency list for each city. The set of  
     * lists is alphabetical, as is each list.
     ***************************************************************************/ 
-static void PrintAdjacencyLists(int cityCount, City[] cities) {
+    static void PrintAdjacencyLists(int cityCount, City[] cities) {
 
         System.out.println("List of Edges in the Graph of Cities by Source City");
         // iterate array of cities
