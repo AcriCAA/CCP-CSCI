@@ -1,0 +1,111 @@
+1. TableA UNION TableB
+
++---------+--------------------------+
+| CustNum | CustName                 |
++---------+--------------------------+
+|     148 | Ai's Appliance and Sport |
+|     282 | Brookings Direct         |
+|     356 | Fegusons                 |
+|     408 | The Everything Shop      |
+|     463 | Bargains Galore          |
+|     524 | Klines                   |
+|     725 | Deerfields Water         |
+|     842 | Allseason's travel       |
+|     701 | Peter's Construction     |
+|     400 | The Everything Shop      |
+|     300 | Brookings Direct         |
++---------+--------------------------+
+
+
+2. TableA INTERSECT TableB
+
++---------+--------------------------+
+| CustNum | CustName                 |
++---------+--------------------------+
+|     148 | Ai's Appliance and Sport |
+|     356 | Fegusons                 |
+|     463 | Bargains Galore          |
+|     524 | Klines                   |
++---------+--------------------------+
+
+
+3. First list the relation for the TableA DIFFERENCE TableB
+
++---------+----------------------+
+| CustNum | CustName             |
++---------+----------------------+
+|     282 | Brookings Direct     |
+|     408 | The Everything Shop  |
+|     725 | Deerfields Water     |
+|     842 | Allseason's travel   |
+|     701 | Peter's Construction |
++---------+----------------------+
+
+4. Then list the relation for the TableB DIFFERENCE TableA
+
++---------+---------------------+
+| CustNum | CustName            |
++---------+---------------------+
+|     400 | The Everything Shop |
+|     300 | Brookings Direct    |
++---------+---------------------+
+
+Write the return relations to represent the result sets for the following JOIN (Equi-Join) operations;
+
+5. TableA INNER JOIN TableB ON TableA.CustNum = TableB.CustNum 
+
++---------+--------------------------+---------+--------------------------+
+| CustNum | CustName                 | CustNum | CustName                 |
++---------+--------------------------+---------+--------------------------+
+|     148 | Ai's Appliance and Sport |     148 | Ai's Appliance and Sport |
+|     356 | Fegusons                 |     356 | Fegusons                 |
+|     463 | Bargains Galore          |     463 | Bargains Galore          |
+|     524 | Klines                   |     524 | Klines                   |
++---------+--------------------------+---------+--------------------------+
+
+6. TableA LEFT OUTER JOIN TableB ON TableA.CustNum = TableB.CustNum
+
++---------+--------------------------+---------+--------------------------+
+| CustNum | CustName                 | CustNum | CustName                 |
++---------+--------------------------+---------+--------------------------+
+|     148 | Ai's Appliance and Sport |     148 | Ai's Appliance and Sport |
+|     356 | Fegusons                 |     356 | Fegusons                 |
+|     463 | Bargains Galore          |     463 | Bargains Galore          |
+|     524 | Klines                   |     524 | Klines                   |
+|     282 | Brookings Direct         |    NULL | NULL                     |
+|     408 | The Everything Shop      |    NULL | NULL                     |
+|     725 | Deerfields Water         |    NULL | NULL                     |
+|     842 | Allseason's travel       |    NULL | NULL                     |
+|     701 | Peter's Construction     |    NULL | NULL                     |
++---------+--------------------------+---------+--------------------------+
+
+7. TableA RIGHT OUTER JOIN TableB ON TableA.CustNum = TableB.CustNum
+
++---------+--------------------------+---------+--------------------------+
+| CustNum | CustName                 | CustNum | CustName                 |
++---------+--------------------------+---------+--------------------------+
+|     148 | Ai's Appliance and Sport |     148 | Ai's Appliance and Sport |
+|     356 | Fegusons                 |     356 | Fegusons                 |
+|     463 | Bargains Galore          |     463 | Bargains Galore          |
+|     524 | Klines                   |     524 | Klines                   |
+|    NULL | NULL                     |     400 | The Everything Shop      |
+|    NULL | NULL                     |     300 | Brookings Direct         |
++---------+--------------------------+---------+--------------------------+
+
+8. TableA FULL OUTER JOIN TableB ON TableA.CustNum = TableB.CustNum
+
++---------+--------------------------+---------+--------------------------+
+| CustNum | CustName                 | CustNum | CustName                 |
++---------+--------------------------+---------+--------------------------+
+|     148 | Ai's Appliance and Sport |     148 | Ai's Appliance and Sport |
+|     356 | Fegusons                 |     356 | Fegusons                 |
+|     463 | Bargains Galore          |     463 | Bargains Galore          |
+|     524 | Klines                   |     524 | Klines                   |
+|     282 | Brookings Direct         |    NULL | NULL                     |
+|     408 | The Everything Shop      |    NULL | NULL                     |
+|     725 | Deerfields Water         |    NULL | NULL                     |
+|     842 | Allseason's travel       |    NULL | NULL                     |
+|     701 | Peter's Construction     |    NULL | NULL                     |
+|    NULL | NULL                     |     400 | The Everything Shop      |
+|    NULL | NULL                     |     300 | Brookings Direct         |
++---------+--------------------------+---------+--------------------------+

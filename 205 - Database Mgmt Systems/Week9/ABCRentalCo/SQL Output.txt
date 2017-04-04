@@ -1,0 +1,215 @@
+SQL Output
+
+mysql> 
+mysql> use ABCRentalCo;
+Database changed
+mysql> 
+mysql> Create table Renter
+    -> (
+    ->     Renter_ID     int auto_increment,
+    ->     First_Name   varchar (70),
+    ->     Last_Name varchar(70),
+    ->     Mid_Init varchar(2),
+    ->     Street_Address varchar(20), 
+    ->     City varchar(75),
+    ->     State varchar(2),
+    ->     ZipCode varchar(10),
+    ->     Email varchar(75),
+    ->     Primary_Phone   varchar (20),
+    ->    constraint renter_PK primary key (Renter_ID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+mysql> Create table Lease
+    -> (
+    ->     Lease_ID      int auto_increment,
+    ->     Begin_Date  date NOT NULL,
+    ->     End_Date    date NOT NULL,
+    ->     Rental_Amount    int,
+    ->   constraint lease_PK primary key (Lease_ID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+mysql> Create table Property
+    -> (
+    ->     Property_ID    int auto_increment,
+    ->     Street_Address varchar(20), 
+    ->     City varchar(75),
+    ->     State varchar(2),
+    ->     ZipCode varchar(10),
+    ->     No_Rooms int,
+    ->     Base_Rate Numeric(7,2),
+    ->     Property_Type   varchar (20),
+    ->    constraint property_PK primary key (Property_ID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+mysql> Create table Rental
+    -> (
+    ->    Renter_ID     int,
+    ->    Lease_ID      int,
+    ->    ActivityDate timestamp default current_timestamp,
+    ->  constraint rental_PK primary key (Renter_ID),
+    ->  constraint rental_FK1 foreign key(Lease_ID) references Lease (Lease_ID),
+    ->  constraint rental_FK2 foreign key(Renter_ID) references Renter (Renter_ID)
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> 
+mysql> 
+mysql> Create table Booking
+    -> (
+    ->  
+    ->    Lease_ID      int,
+    ->    Property_ID    int,
+    ->    ActivityDate timestamp default current_timestamp,
+    ->  constraint booking_PK primary key (Lease_ID),
+    ->  constraint booking_FK1 foreign key(Lease_ID) references Lease (Lease_ID),
+    ->  constraint booking_FK2 foreign key(Property_ID) references Property (Property_ID)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> 
+mysql> insert into Renter (First_Name, Last_Name, Mid_Init, Street_Address, City, State, ZipCode, Email, Primary_Phone) values ('Mister', 'Smithy', 'A', '123 Main Street','Philadelphia', 'PA', '11231','a@b.com', '555.555.5555');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Renter (First_Name, Last_Name, Mid_Init, Street_Address, City, State, ZipCode, Email, Primary_Phone) values ('Mister', 'Smithe', 'B', '124 Main Street','Philadelphia', 'PA', '11231','a@c.com', '555.555.5556');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Renter (First_Name, Last_Name, Mid_Init, Street_Address, City, State, ZipCode, Email, Primary_Phone) values ('Misses', 'Smithy', 'C', '125 Main Street','Philadelphia', 'PA', '11231','a@d.com', '555.555.5557');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Renter (First_Name, Last_Name, Mid_Init, Street_Address, City, State, ZipCode, Email, Primary_Phone) values ('Mister', 'Smitha', 'D', '126 Main Street','Philadelphia', 'PA', '11231','a@e.com', '555.555.5558');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Renter (First_Name, Last_Name, Mid_Init, Street_Address, City, State, ZipCode, Email, Primary_Phone) values ('Mister', 'Smithi', 'E', '127 Main Street','Philadelphia', 'PA', '11231','a@f.com', '555.555.5559');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> 
+mysql> insert into Lease (Begin_Date,End_Date,Rental_Amount) values ('2014-11-22','2015-11-22',1000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Lease (Begin_Date,End_Date,Rental_Amount) values ('2015-11-22','2016-11-22',1002);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Lease (Begin_Date,End_Date,Rental_Amount) values ('2014-11-23','2015-11-25',1003);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Lease (Begin_Date,End_Date,Rental_Amount) values ('2011-11-22','2016-11-22',1004);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Lease (Begin_Date,End_Date,Rental_Amount) values ('2011-11-22','2013-11-22',1005);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Property (Street_Address, City, State, ZipCode, No_Rooms, Base_Rate, Property_Type) values ('123 Main Street','Philadelphia', 'PA', '11231',1, 100.40, 'Standard');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Property (Street_Address, City, State, ZipCode, No_Rooms, Base_Rate, Property_Type) values ('121 Main Street','Philadelphia', 'PA', '11231',1, 101.40, 'Standardish');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Property (Street_Address, City, State, ZipCode, No_Rooms, Base_Rate, Property_Type) values ('125 Main Street','Philadelphia', 'PA', '11231',5, 122.40, 'Deluxe');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Property (Street_Address, City, State, ZipCode, No_Rooms, Base_Rate, Property_Type) values ('15 Main Street','Philadelphia', 'PA', '11231',3, 122.40, 'Deluxe');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Property (Street_Address, City, State, ZipCode, No_Rooms, Base_Rate, Property_Type) values ('12 Main Street','Philadelphia', 'PA', '11231',2, 1.40, 'Gross');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Rental (Renter_ID,Lease_ID) values (1,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Rental (Renter_ID,Lease_ID) values (2,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Rental (Renter_ID,Lease_ID) values (3,3;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> insert into Rental (Renter_ID,Lease_ID) values (4,4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Rental (Renter_ID,Lease_ID) values (5,5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> 
+mysql> insert into Rental (Renter_ID,Lease_ID) values (3,3);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into Booking (Lease_ID, Property_ID) values (1,1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Booking (Lease_ID, Property_ID) values (2,2);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Booking (Lease_ID, Property_ID) values (3,3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Booking (Lease_ID, Property_ID) values (4,4);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into Booking (Lease_ID, Property_ID) values (5,5);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM Renter;
++-----------+------------+-----------+----------+-----------------+--------------+-------+---------+---------+---------------+
+| Renter_ID | First_Name | Last_Name | Mid_Init | Street_Address  | City         | State | ZipCode | Email   | Primary_Phone |
++-----------+------------+-----------+----------+-----------------+--------------+-------+---------+---------+---------------+
+|         1 | Mister     | Smithy    | A        | 123 Main Street | Philadelphia | PA    | 11231   | a@b.com | 555.555.5555  |
+|         2 | Mister     | Smithe    | B        | 124 Main Street | Philadelphia | PA    | 11231   | a@c.com | 555.555.5556  |
+|         3 | Misses     | Smithy    | C        | 125 Main Street | Philadelphia | PA    | 11231   | a@d.com | 555.555.5557  |
+|         4 | Mister     | Smitha    | D        | 126 Main Street | Philadelphia | PA    | 11231   | a@e.com | 555.555.5558  |
+|         5 | Mister     | Smithi    | E        | 127 Main Street | Philadelphia | PA    | 11231   | a@f.com | 555.555.5559  |
++-----------+------------+-----------+----------+-----------------+--------------+-------+---------+---------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Lease;
++----------+------------+------------+---------------+
+| Lease_ID | Begin_Date | End_Date   | Rental_Amount |
++----------+------------+------------+---------------+
+|        1 | 2014-11-22 | 2015-11-22 |          1000 |
+|        2 | 2015-11-22 | 2016-11-22 |          1002 |
+|        3 | 2014-11-23 | 2015-11-25 |          1003 |
+|        4 | 2011-11-22 | 2016-11-22 |          1004 |
+|        5 | 2011-11-22 | 2013-11-22 |          1005 |
++----------+------------+------------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> Select * FROM Property;
++-------------+-----------------+--------------+-------+---------+----------+-----------+---------------+
+| Property_ID | Street_Address  | City         | State | ZipCode | No_Rooms | Base_Rate | Property_Type |
++-------------+-----------------+--------------+-------+---------+----------+-----------+---------------+
+|           1 | 123 Main Street | Philadelphia | PA    | 11231   |        1 |    100.40 | Standard      |
+|           2 | 121 Main Street | Philadelphia | PA    | 11231   |        1 |    101.40 | Standardish   |
+|           3 | 125 Main Street | Philadelphia | PA    | 11231   |        5 |    122.40 | Deluxe        |
+|           4 | 15 Main Street  | Philadelphia | PA    | 11231   |        3 |    122.40 | Deluxe        |
+|           5 | 12 Main Street  | Philadelphia | PA    | 11231   |        2 |      1.40 | Gross         |
++-------------+-----------------+--------------+-------+---------+----------+-----------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> Select * FROM Rental;
++-----------+----------+---------------------+
+| Renter_ID | Lease_ID | ActivityDate        |
++-----------+----------+---------------------+
+|         1 |        1 | 2017-03-27 21:52:06 |
+|         2 |        2 | 2017-03-27 21:52:06 |
+|         3 |        3 | 2017-03-27 21:52:26 |
+|         4 |        4 | 2017-03-27 21:52:06 |
+|         5 |        5 | 2017-03-27 21:52:08 |
++-----------+----------+---------------------+
+5 rows in set (0.00 sec)
+
+mysql> Select * FROM Booking;
++----------+-------------+---------------------+
+| Lease_ID | Property_ID | ActivityDate        |
++----------+-------------+---------------------+
+|        1 |           1 | 2017-03-27 21:52:33 |
+|        2 |           2 | 2017-03-27 21:52:33 |
+|        3 |           3 | 2017-03-27 21:52:33 |
+|        4 |           4 | 2017-03-27 21:52:33 |
+|        5 |           5 | 2017-03-27 21:52:33 |
++----------+-------------+---------------------+
+5 rows in set (0.00 sec)
