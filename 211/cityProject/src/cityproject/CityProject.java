@@ -410,7 +410,7 @@ public class CityProject {
     
     }
     
-    } // close stackCities
+    } // close stackCities          
     
     /*************************************************************************** 
     * printGetStartCity() 
@@ -421,7 +421,6 @@ public class CityProject {
         System.out.println("=============================================================");
         System.out.println("Please enter the city name for your starting point as "
                 + "the city name and state abbreviation, \ne.g. New York NY:");
-          
     }
     
     
