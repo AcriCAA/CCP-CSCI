@@ -1,0 +1,242 @@
+Corey Acri - World Assignment Output 
+
+mysql> ## The Continent, Country Name, District, City Name and City Population of for all cities with a population of over 3 million people. 
+mysql> ## Sort the results by Continent, Country Name, District and City Name.
+mysql> 
+mysql> SELECT cn.Continent "Continent", cn.Name "Country Name", cy.District "City District", cy.Population "Population"
+    -> FROM Country cn, City cy
+    -> WHERE cy.Population > 3000000
+    -> AND cn.Code = cy.countryCode
+    -> order by cn.Continent, cn.Name, cy.District, cy.name asc; 
++---------------+---------------------------------------+---------------------+------------+
+| Continent     | Country Name                          | City District       | Population |
++---------------+---------------------------------------+---------------------+------------+
+| Asia          | Bangladesh                            | Dhaka               |    3612850 |
+| Asia          | China                                 | Chongqing           |    6351600 |
+| Asia          | China                                 | Guangdong           |    4256300 |
+| Asia          | China                                 | Heilongjiang        |    4289800 |
+| Asia          | China                                 | Hubei               |    4344600 |
+| Asia          | China                                 | Liaoning            |    4265200 |
+| Asia          | China                                 | Peking              |    7472000 |
+| Asia          | China                                 | Shanghai            |    9696300 |
+| Asia          | China                                 | Sichuan             |    3361500 |
+| Asia          | China                                 | Tianjin             |    5286800 |
+| Asia          | India                                 | Delhi               |    7206704 |
+| Asia          | India                                 | Maharashtra         |   10500000 |
+| Asia          | India                                 | Tamil Nadu          |    3841396 |
+| Asia          | India                                 | West Bengali        |    4399819 |
+| Asia          | Indonesia                             | Jakarta Raya        |    9604900 |
+| Asia          | Iran                                  | Teheran             |    6758845 |
+| Asia          | Iraq                                  | Baghdad             |    4336000 |
+| Asia          | Japan                                 | Kanagawa            |    3339594 |
+| Asia          | Japan                                 | Tokyo-to            |    7980230 |
+| Asia          | Myanmar                               | Rangoon [Yangon]    |    3361700 |
+| Asia          | Pakistan                              | Punjab              |    5063499 |
+| Asia          | Pakistan                              | Sindh               |    9269265 |
+| Asia          | Saudi Arabia                          | Riyadh              |    3324000 |
+| Asia          | Singapore                             | –                   |    4017733 |
+| Asia          | South Korea                           | Pusan               |    3804522 |
+| Asia          | South Korea                           | Seoul               |    9981619 |
+| Asia          | Thailand                              | Bangkok             |    6320174 |
+| Asia          | Turkey                                | Ankara              |    3038159 |
+| Asia          | Turkey                                | Istanbul            |    8787958 |
+| Asia          | Vietnam                               | Ho Chi Minh City    |    3980000 |
+| Europe        | Germany                               | Berliini            |    3386667 |
+| Europe        | Russian Federation                    | Moscow (City)       |    8389200 |
+| Europe        | Russian Federation                    | Pietari             |    4694000 |
+| Europe        | United Kingdom                        | England             |    7285000 |
+| North America | Mexico                                | Distrito Federal    |    8591309 |
+| North America | United States                         | California          |    3694820 |
+| North America | United States                         | New York            |    8008278 |
+| Africa        | Congo, The Democratic Republic of the | Kinshasa            |    5064000 |
+| Africa        | Egypt                                 | Aleksandria         |    3328196 |
+| Africa        | Egypt                                 | Kairo               |    6789479 |
+| Oceania       | Australia                             | New South Wales     |    3276207 |
+| South America | Brazil                                | Rio de Janeiro      |    5598953 |
+| South America | Brazil                                | São Paulo           |    9968485 |
+| South America | Chile                                 | Santiago            |    4703954 |
+| South America | Colombia                              | Santafé de Bogotá   |    6260862 |
+| South America | Peru                                  | Lima                |    6464693 |
++---------------+---------------------------------------+---------------------+------------+
+46 rows in set (0.00 sec)
+
+mysql> ## The Country Name, Language percentage, and population for all countries where English is the official language. 
+mysql> ## Sort the results by descending percentage .
+mysql> 
+mysql> 
+mysql> SELECT cn.Name "Country Name", cl.Percentage "Language Percentage", cn.Population "Population"
+    -> FROM Country cn, CountryLanguage cl
+    -> WHERE cl.IsOfficial = TRUE 
+    -> AND cl.Language = "English"
+    -> AND cl.CountryCode = cn.Code
+    -> order by cl.Percentage desc; 
++--------------------------------------+---------------------+------------+
+| Country Name                         | Language Percentage | Population |
++--------------------------------------+---------------------+------------+
+| Bermuda                              |               100.0 |      65000 |
+| Ireland                              |                98.4 |    3775100 |
+| United Kingdom                       |                97.3 |   59623400 |
+| Gibraltar                            |                88.9 |      25000 |
+| New Zealand                          |                87.0 |    3862000 |
+| United States                        |                86.2 |  278357000 |
+| Virgin Islands, U.S.                 |                81.7 |      93000 |
+| Australia                            |                81.2 |   18886000 |
+| Canada                               |                60.4 |   31147000 |
+| Belize                               |                50.8 |     241000 |
+| Guam                                 |                37.5 |     168000 |
+| Vanuatu                              |                28.3 |     190000 |
+| Saint Lucia                          |                20.0 |     154000 |
+| South Africa                         |                 8.5 |   40377000 |
+| Nauru                                |                 7.5 |      12000 |
+| Northern Mariana Islands             |                 4.8 |      78000 |
+| Seychelles                           |                 3.8 |      77000 |
+| Palau                                |                 3.2 |      19000 |
+| American Samoa                       |                 3.1 |      68000 |
+| Zimbabwe                             |                 2.2 |   11669000 |
+| Hong Kong                            |                 2.2 |    6782000 |
+| Malta                                |                 2.1 |     380200 |
+| Samoa                                |                 0.6 |     180000 |
+| Montserrat                           |                 0.0 |      11000 |
+| Anguilla                             |                 0.0 |       8000 |
+| Virgin Islands, British              |                 0.0 |      21000 |
+| Cayman Islands                       |                 0.0 |      38000 |
+| Tuvalu                               |                 0.0 |      12000 |
+| Lesotho                              |                 0.0 |    2153000 |
+| Falkland Islands                     |                 0.0 |       2000 |
+| Tonga                                |                 0.0 |      99000 |
+| Tokelau                              |                 0.0 |       2000 |
+| Saint Vincent and the Grenadines     |                 0.0 |     114000 |
+| Turks and Caicos Islands             |                 0.0 |      17000 |
+| Saint Kitts and Nevis                |                 0.0 |      38000 |
+| Niue                                 |                 0.0 |       2000 |
+| Marshall Islands                     |                 0.0 |      64000 |
+| Cocos (Keeling) Islands              |                 0.0 |        600 |
+| Christmas Island                     |                 0.0 |       2500 |
+| Barbados                             |                 0.0 |     270000 |
+| Antigua and Barbuda                  |                 0.0 |      68000 |
+| United States Minor Outlying Islands |                 0.0 |          0 |
+| Norfolk Island                       |                 0.0 |       2000 |
+| Saint Helena                         |                 0.0 |       6000 |
++--------------------------------------+---------------------+------------+
+44 rows in set (0.00 sec)
+
+mysql> ## The Life Expectancy, Country Population, Country Name, Head of State and Official Language of countries with more than 
+mysql> ##100 million people. Sort the results by Life Expectancy, Population.
+mysql> 
+mysql> SELECT cn.LifeExpectancy "Life Expectancy", cn.Population "Population", cn.Name "Country Name", cn.HeadOfState "Head of State", cl.Language "Official Language"
+    -> FROM Country cn, CountryLanguage cl
+    -> WHERE cl.IsOfficial = TRUE 
+    -> AND cn.Population > 100000000
+    -> AND cl.CountryCode = cn.Code
+    -> order by cn.LifeExpectancy, cn.Population asc;
++-----------------+------------+--------------------+---------------------------+-------------------+
+| Life Expectancy | Population | Country Name       | Head of State             | Official Language |
++-----------------+------------+--------------------+---------------------------+-------------------+
+|            60.2 |  129155000 | Bangladesh         | Shahabuddin Ahmad         | Bengali           |
+|            61.1 |  156483000 | Pakistan           | Mohammad Rafiq Tarar      | Urdu              |
+|            62.5 | 1013662000 | India              | Kocheril Raman Narayanan  | Hindi             |
+|            62.9 |  170115000 | Brazil             | Fernando Henrique Cardoso | Portuguese        |
+|            67.2 |  146934000 | Russian Federation | Vladimir Putin            | Russian           |
+|            68.0 |  212107000 | Indonesia          | Abdurrahman Wahid         | Malay             |
+|            71.4 | 1277558000 | China              | Jiang Zemin               | Chinese           |
+|            77.1 |  278357000 | United States      | George W. Bush            | English           |
+|            80.7 |  126714000 | Japan              | Akihito                   | Japanese          |
++-----------------+------------+--------------------+---------------------------+-------------------+
+9 rows in set (0.01 sec)
+
+mysql> ## The Country Name and Capital City of countries with surface area greater than 2 million.
+mysql> 
+mysql> SELECT cn.Name "Country Name" , cn.Capital "Capital City"
+    -> FROM Country cn 
+    -> WHERE SurfaceArea > 2000000;
++---------------------------------------+--------------+
+| Country Name                          | Capital City |
++---------------------------------------+--------------+
+| Algeria                               |           35 |
+| Argentina                             |           69 |
+| Australia                             |          135 |
+| Brazil                                |          211 |
+| Greenland                             |          917 |
+| India                                 |         1109 |
+| Canada                                |         1822 |
+| Kazakstan                             |         1864 |
+| China                                 |         1891 |
+| Congo, The Democratic Republic of the |         2298 |
+| Saudi Arabia                          |         3173 |
+| Sudan                                 |         3225 |
+| Russian Federation                    |         3580 |
+| United States                         |         3813 |
+| Antarctica                            |         NULL |
++---------------------------------------+--------------+
+15 rows in set (0.00 sec)
+
+mysql> ## The Country Name, Independence Year, Capital City Name, Language, Language Percentage, with Independence Year > 1991. 
+mysql> 
+Display all 826 possibilities? (y or n) 
+mysql> ## Sort the results by country name ascending and language percentage Descending.
+mysql> 
+mysql> SELECT cn.Name "Country Name" , cn.IndepYear "Independence Year", cn.Capital "Capital City", cl.Language "Language", cl.Percentage "Language Percentage"
+    -> FROM Country cn, CountryLanguage cl
+    -> WHERE cn.IndepYear > 1991
+    -> AND cl.CountryCode = cn.Code
+    -> order by cn.Name asc, cl.Percentage desc; 
++------------------------+-------------------+--------------+-----------------------+---------------------+
+| Country Name           | Independence Year | Capital City | Language              | Language Percentage |
++------------------------+-------------------+--------------+-----------------------+---------------------+
+| Bosnia and Herzegovina |              1992 |          201 | Serbo-Croatian        |                99.2 |
+| Czech Republic         |              1993 |         3339 | Czech                 |                81.2 |
+| Czech Republic         |              1993 |         3339 | Moravian              |                12.9 |
+| Czech Republic         |              1993 |         3339 | Slovak                |                 3.1 |
+| Czech Republic         |              1993 |         3339 | Polish                |                 0.6 |
+| Czech Republic         |              1993 |         3339 | German                |                 0.5 |
+| Czech Republic         |              1993 |         3339 | Silesiana             |                 0.4 |
+| Czech Republic         |              1993 |         3339 | Romani                |                 0.3 |
+| Czech Republic         |              1993 |         3339 | Hungarian             |                 0.2 |
+| Eritrea                |              1993 |          652 | Tigrinja              |                49.1 |
+| Eritrea                |              1993 |          652 | Tigre                 |                31.7 |
+| Eritrea                |              1993 |          652 | Afar                  |                 4.3 |
+| Eritrea                |              1993 |          652 | Hadareb               |                 3.8 |
+| Eritrea                |              1993 |          652 | Saho                  |                 3.0 |
+| Eritrea                |              1993 |          652 | Bilin                 |                 3.0 |
+| Palau                  |              1994 |         2881 | Palau                 |                82.2 |
+| Palau                  |              1994 |         2881 | Philippene Languages  |                 9.2 |
+| Palau                  |              1994 |         2881 | English               |                 3.2 |
+| Palau                  |              1994 |         2881 | Chinese               |                 1.6 |
+| Slovakia               |              1993 |         3209 | Slovak                |                85.6 |
+| Slovakia               |              1993 |         3209 | Hungarian             |                10.5 |
+| Slovakia               |              1993 |         3209 | Romani                |                 1.7 |
+| Slovakia               |              1993 |         3209 | Czech and Moravian    |                 1.1 |
+| Slovakia               |              1993 |         3209 | Ukrainian and Russian |                 0.6 |
++------------------------+-------------------+--------------+-----------------------+---------------------+
+24 rows in set (0.00 sec)
+
+mysql> SELECT * FROM Country WHERE Name = "United States"
+    -> ;
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+| Code | Name          | Continent     | Region        | SurfaceArea | IndepYear | Population | LifeExpectancy | GNP        | GNPOld     | LocalName     | GovernmentForm   | HeadOfState    | Capital | Code2 |
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+| USA  | United States | North America | North America |  9363520.00 |      1776 |  278357000 |           77.1 | 8510700.00 | 8110900.00 | United States | Federal Republic | George W. Bush |    3813 | US    |
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM Country WHERE Code = "USA";
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+| Code | Name          | Continent     | Region        | SurfaceArea | IndepYear | Population | LifeExpectancy | GNP        | GNPOld     | LocalName     | GovernmentForm   | HeadOfState    | Capital | Code2 |
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+| USA  | United States | North America | North America |  9363520.00 |      1776 |  278357000 |           77.1 | 8510700.00 | 8110900.00 | United States | Federal Republic | George W. Bush |    3813 | US    |
++------+---------------+---------------+---------------+-------------+-----------+------------+----------------+------------+------------+---------------+------------------+----------------+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> UPDATE Country 
+    -> SET HeadOfState = "Corey Acri"
+    -> WHERE Code = "USA";
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT HeadOfState "Head of State", Name "Country" FROM Country WHERE Code = "USA";
++---------------+---------------+
+| Head of State | Country       |
++---------------+---------------+
+| Corey Acri    | United States |
++---------------+---------------+
+1 row in set (0.01 sec)

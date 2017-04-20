@@ -37,13 +37,17 @@ SELECT max(Prod_price) 'Price High', min(Prod_price) 'Price Low', avg(Prod_price
 
 # List vendor name,  product name, product price and product description
 
-SELECT vend_name, Prod_name, Prod_price, Prod_desc
-FROM vendor, product;
+SELECT v.vend_name, p.Prod_name, p.Prod_price, p.Prod_desc
+FROM vendor v, product p
+WHERE v.Vend_id = p.Vend_id;
 
 # List Customer name, order date, quantity, item price and product name.  Sort the list by order date.
 
-SELECT Cust_name, order_date, quantity, item_price, Prod_name
-FROM customer, orders, orderitem, product
+SELECT c.Cust_name, o.order_date, oi.quantity, oi.item_price, p.Prod_name
+FROM customer c, orders o, orderitem oi, product p
+WHERE c.Cust_id = o.Cust_id
+AND o.Order_num = oi.Order_num
+AND oi.prod_id = p.Prod_id
 order by order_date desc;
 
 # List Vendor Name of Vendors that don’t have products.
@@ -56,7 +60,8 @@ WHERE not exists (select 'x' from product p where v.Vend_id = p.Vend_id);
 # List Vendor Name, Product Name and Price. Sort the list by price descending.
 
 SELECT vend_name 'Vendor Name', Prod_name 'Product Name', Prod_price 'Product Price'
-FROM vendor, product 
+FROM vendor v, product p
+WHERE v.Vend_id = p.Vend_id
 order by Prod_price desc;
 
 # List State and count of vendors by state (State, Count) use Group By

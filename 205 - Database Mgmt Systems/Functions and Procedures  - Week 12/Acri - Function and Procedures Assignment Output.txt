@@ -1,0 +1,40 @@
+mysql> delimiter |
+mysql> create function f_add20 (numIn int)
+    ->       returns int
+    ->   begin
+    ->    declare num int;
+    ->    select numIn + 20 into num; 
+    ->    return num;
+    ->   end |
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delimiter ;
+mysql> select f_add20(1) from dual;
++------------+
+| f_add20(1) |
++------------+
+|         21 |
++------------+
+1 row in set (0.00 sec)
+
+
+mysql> delimiter //
+mysql> create procedure 
+    ->   p_add2Numbers ( in numberOne int, in numberTwo int, out numberOut int)
+    -> begin
+    -> select numberOne + numberTwo
+    ->   into numberOut; 
+    -> end //
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> call p_add2Numbers (1,3,@mySum);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select @mySum;
++--------+
+| @mySum |
++--------+
+|      4 |
++--------+
+1 row in set (0.00 sec)

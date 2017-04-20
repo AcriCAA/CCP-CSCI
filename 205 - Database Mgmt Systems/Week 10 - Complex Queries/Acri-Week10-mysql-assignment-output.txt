@@ -1,0 +1,205 @@
+mysql> ##### STARTING ALL QUERIES FOR OUTPUT ####
+mysql> #Update - Write a SQL Update to change customer 10011.  New Name is ‘ Technology Inc.’, New Address is ‘111 Franklin St, Philadelphia, PA 19130’
+mysql> 
+mysql> SELECT Cust_name name FROM customer WHERE Cust_id = '10011'; 
++----------------------+
+| name                 |
++----------------------+
+| Agile Software Corp. |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> UPDATE customer 
+    -> SET Cust_name = 'Technology Inc.', 
+    -> Cust_address = '111 Franklin St.', 
+    -> Cust_city = 'Philadelphia', 
+    -> Cust_State = 'PA', 
+    -> Cust_zip = '19130' 
+    -> WHERE Cust_id = '10011'; 
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> 
+mysql> SELECT * FROM customer WHERE Cust_id = '10011'; 
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+| cust_id | cust_name       | cust_address     | cust_city    | cust_state | cust_zip | cust_country | cust_contact | cust_email |
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+|   10011 | Technology Inc. | 111 Franklin St. | Philadelphia | PA         | 19130    | USA          | M Mitt       | NULL       |
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> # DELETE Write a SQL Delete to remove customer 10010.
+mysql> 
+mysql> SELECT * FROM customer WHERE Cust_id = '10011';
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+| cust_id | cust_name       | cust_address     | cust_city    | cust_state | cust_zip | cust_country | cust_contact | cust_email |
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+|   10011 | Technology Inc. | 111 Franklin St. | Philadelphia | PA         | 19130    | USA          | M Mitt       | NULL       |
++---------+-----------------+------------------+--------------+------------+----------+--------------+--------------+------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> DELETE FROM customer WHERE Cust_id = '10011';
+Query OK, 1 row affected (0.00 sec)
+
+mysql> 
+mysql> SELECT * FROM customer WHERE Cust_id = '10011';
+Empty set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> # MAX, MIN, Average - Write 3 SQL statements to find the highest (MAX), Lowest (MIN) and Average (AVG) price from the product table.
+mysql> 
+mysql> SELECT max(Prod_price) FROM product; 
++-----------------+
+| max(Prod_price) |
++-----------------+
+|           55.00 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> SELECT min(Prod_price) FROM product; 
++-----------------+
+| min(Prod_price) |
++-----------------+
+|            2.50 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> SELECT avg(Prod_price) FROM product; 
++-----------------+
+| avg(Prod_price) |
++-----------------+
+|       16.133571 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> # Rewrite 3 above to use 1 SQL statement with labels for each attribute 
+mysql> 
+mysql> SELECT max(Prod_price) 'Price High', min(Prod_price) 'Price Low', avg(Prod_price) 'Average' FROM product;
++------------+-----------+-----------+
+| Price High | Price Low | Average   |
++------------+-----------+-----------+
+|      55.00 |      2.50 | 16.133571 |
++------------+-----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> # List vendor name,  product name, product price and product description
+mysql> 
+mysql> SELECT v.vend_name, p.Prod_name, p.Prod_price, p.Prod_desc
+    -> FROM vendor v, product p
+    -> WHERE v.Vend_id = p.Vend_id;
++-------------+----------------+------------+----------------------------------------------------------------+
+| vend_name   | Prod_name      | Prod_price | Prod_desc                                                      |
++-------------+----------------+------------+----------------------------------------------------------------+
+| Anvils R Us | .5 ton anvil   |       5.99 | .5 ton anvil, black, complete with handy hook                  |
+| Anvils R Us | 1 ton anvil    |       9.99 | 1 ton anvil, black, complete with handy hook and carrying case |
+| Anvils R Us | 2 ton anvil    |      14.99 | 2 ton anvil, black, complete with handy hook and carrying case |
+| LT Supplies | Fuses          |       3.42 | 1 dozen, extra long                                            |
+| LT Supplies | Oil can        |       8.99 | Oil can, red                                                   |
+| ACME        | Detonator      |      13.00 | Detonator (plunger powered), fuses not included                |
+| ACME        | Bird seed      |      10.00 | Large bag (suitable for road runners)                          |
+| ACME        | Carrots        |       2.50 | Carrots (rabbit hunting season only)                           |
+| ACME        | Safe           |      50.00 | Safe with combination lock                                     |
+| ACME        | Sling          |       4.49 | Sling, one size fits all                                       |
+| ACME        | TNT (1 stick)  |       2.50 | TNT, red, single stick                                         |
+| ACME        | TNT (5 sticks) |      10.00 | TNT, red, pack of 10 sticks                                    |
+| Jet Set     | JetPack 1000   |      35.00 | JetPack 1000, intended for single use                          |
+| Jet Set     | JetPack 2000   |      55.00 | JetPack 2000, multi-use                                        |
++-------------+----------------+------------+----------------------------------------------------------------+
+14 rows in set (0.00 sec)
+
+mysql> 
+mysql> # List Customer name, order date, quantity, item price and product name.  Sort the list by order date.
+mysql> 
+mysql> SELECT c.Cust_name, o.order_date, oi.quantity, oi.item_price, p.Prod_name 
+    -> FROM customer c, orders o, orderitem oi, product p
+    -> WHERE c.Cust_id = o.Cust_id
+    -> AND o.Order_num = oi.Order_num
+    -> AND oi.prod_id = p.Prod_id
+    -> order by order_date desc;
++----------------+---------------------+----------+------------+----------------+
+| Cust_name      | order_date          | quantity | item_price | Prod_name      |
++----------------+---------------------+----------+------------+----------------+
+| Coyote Inc.    | 2005-10-08 00:00:00 |        1 |      10.00 | Bird seed      |
+| Coyote Inc.    | 2005-10-08 00:00:00 |        1 |       8.99 | Oil can        |
+| Coyote Inc.    | 2005-10-08 00:00:00 |        1 |       4.49 | Sling          |
+| Coyote Inc.    | 2005-10-08 00:00:00 |        1 |      14.99 | 2 ton anvil    |
+| E Fudd         | 2005-10-03 00:00:00 |       50 |       2.50 | Carrots        |
+| Yosemite Place | 2005-09-30 00:00:00 |      100 |      10.00 | TNT (5 sticks) |
+| Wascals        | 2005-09-12 00:00:00 |        1 |      55.00 | JetPack 2000   |
+| Coyote Inc.    | 2005-09-01 00:00:00 |       10 |       5.99 | .5 ton anvil   |
+| Coyote Inc.    | 2005-09-01 00:00:00 |        3 |       9.99 | 1 ton anvil    |
+| Coyote Inc.    | 2005-09-01 00:00:00 |        5 |      10.00 | TNT (5 sticks) |
+| Coyote Inc.    | 2005-09-01 00:00:00 |        1 |      10.00 | Bird seed      |
++----------------+---------------------+----------+------------+----------------+
+11 rows in set (0.00 sec)
+
+mysql> 
+mysql> # List Vendor Name of Vendors that don’t have products.
+mysql> 
+mysql> SELECT v.Vend_id 'Vendor ID'
+    -> FROM vendor v 
+    -> WHERE not exists (select 'x' from product p where v.Vend_id = p.Vend_id); 
++-----------+
+| Vendor ID |
++-----------+
+|      1004 |
+|      1006 |
+|      1007 |
+|      1008 |
++-----------+
+4 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> # List Vendor Name, Product Name and Price. Sort the list by price descending.
+mysql> 
+mysql> SELECT vend_name 'Vendor Name', Prod_name 'Product Name', Prod_price 'Product Price'
+    -> FROM vendor v, product p
+    -> WHERE v.Vend_id = p.Vend_id
+    -> order by Prod_price desc;
++-------------+----------------+---------------+
+| Vendor Name | Product Name   | Product Price |
++-------------+----------------+---------------+
+| Jet Set     | JetPack 2000   |         55.00 |
+| ACME        | Safe           |         50.00 |
+| Jet Set     | JetPack 1000   |         35.00 |
+| Anvils R Us | 2 ton anvil    |         14.99 |
+| ACME        | Detonator      |         13.00 |
+| ACME        | Bird seed      |         10.00 |
+| ACME        | TNT (5 sticks) |         10.00 |
+| Anvils R Us | 1 ton anvil    |          9.99 |
+| LT Supplies | Oil can        |          8.99 |
+| Anvils R Us | .5 ton anvil   |          5.99 |
+| ACME        | Sling          |          4.49 |
+| LT Supplies | Fuses          |          3.42 |
+| ACME        | TNT (1 stick)  |          2.50 |
+| ACME        | Carrots        |          2.50 |
++-------------+----------------+---------------+
+14 rows in set (0.00 sec)
+
+mysql> 
+mysql> # List State and count of vendors by state (State, Count) use Group By
+mysql> 
+mysql> SELECT vend_state, count(Vend_id) count
+    -> FROM vendor 
+    -> group by vend_state;
++------------+-------+
+| vend_state | count |
++------------+-------+
+| NULL       |     2 |
+| CA         |     1 |
+| MI         |     1 |
+| NY         |     2 |
+| OH         |     2 |
++------------+-------+
+5 rows in set (0.01 sec)
